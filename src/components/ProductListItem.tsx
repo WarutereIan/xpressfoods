@@ -7,6 +7,8 @@ type ProductListItemProps = {
   product: Product;
 };
 
+export const defaultPizzaImage = "";
+
 export const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
 
