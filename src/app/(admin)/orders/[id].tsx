@@ -1,15 +1,37 @@
 import { useLocalSearchParams, Stack } from "expo-router";
-import { FlatList, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import OrderItemListItem from "@/src/components/OrderItemListItem";
-import { OrderStatusList } from "@/src/types";
+import { OrderStatus, OrderStatusList } from "@/src/types";
 import Colors from "@/src/constants/Colors";
+import { useOrderDetails, useUpdateOrder } from "@/src/api/orders";
 
 export default function OrderDetailsScreen() {
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
 
-  const order = orders.find((o) => o.id.toString() === id);
+  const id = parseFloat(typeof idString === "string" ? idString : "");
+
+  const { mutate: updateOrder } = useUpdateOrder();
+
+  const updateStatus = async (status: OrderStatus) => {
+    updateOrder({ id, status: status });
+  };
+
+  const { data: order, isLoading, error } = useOrderDetails(id);
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error) {
+    return <Text>failed to fetch products</Text>;
+  }
 
   if (!order) {
     return <Text>Not Found</Text>;
@@ -23,36 +45,39 @@ export default function OrderDetailsScreen() {
         data={order.order_items}
         renderItem={({ item }) => <OrderItemListItem item={item} />}
         contentContainerStyle={{ gap: 10 }}
-        ListFooterComponent={()=><>
-          <Text style={{ fontWeight: "bold" }}>Status</Text>
-          <View style={{ flexDirection: "row", gap: 5 }}>
-            {OrderStatusList.map((status) => (
-              <Pressable
-                key={status}
-                onPress={() => console.warn("Update status")}
-                style={{
-                  borderColor: Colors.light.tint,
-                  borderWidth: 1,
-                  padding: 10,
-                  borderRadius: 5,
-                  marginVertical: 10,
-                  backgroundColor:
-                    order.status === status ? Colors.light.tint : "transparent",
-                }}
-              >
-                <Text
+        ListFooterComponent={() => (
+          <>
+            <Text style={{ fontWeight: "bold" }}>Status</Text>
+            <View style={{ flexDirection: "row", gap: 5 }}>
+              {OrderStatusList.map((status) => (
+                <Pressable
+                  key={status}
+                  onPress={() => console.warn("Update status")}
                   style={{
-                    color:
-                      order.status === status ? "white" : Colors.light.tint,
+                    borderColor: Colors.light.tint,
+                    borderWidth: 1,
+                    padding: 10,
+                    borderRadius: 5,
+                    marginVertical: 10,
+                    backgroundColor:
+                      order.status === status
+                        ? Colors.light.tint
+                        : "transparent",
                   }}
                 >
-                  {status}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </>
-}
+                  <Text
+                    style={{
+                      color:
+                        order.status === status ? "white" : Colors.light.tint,
+                    }}
+                  >
+                    {status}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </>
+        )}
       />
     </View>
   );

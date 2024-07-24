@@ -2,8 +2,7 @@ import { View, FlatList, ActivityIndicator, Text } from "react-native";
 
 import { ProductListItem } from "@/src/components/ProductListItem";
 
-import { supabase } from "@/src/lib/supabase";
-import { useQuery } from "@tanstack/react-query";
+
 import { useProductList } from "@/src/api/products";
 
 export default function MenuScreen() {

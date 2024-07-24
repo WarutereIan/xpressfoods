@@ -78,7 +78,7 @@ export const useUpdateProduct = () => {
         throw new Error(error.message);
       }
       return updatedProduct;
-    },
+    }, 
     async onSuccess(_, { id }) {
       //refresh products in cache after creating  a new product in db
       await queryClient.invalidateQueries({ queryKey: ["products"] });
