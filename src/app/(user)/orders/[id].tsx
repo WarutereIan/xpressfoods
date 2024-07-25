@@ -4,6 +4,7 @@ import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import OrderItemListItem from "@/src/components/OrderItemListItem";
 import { useOrderDetails } from "@/src/api/orders";
+import { useUpdateOrderSubscription } from "@/src/api/orders/subscription";
 
 export default function OrderDetailsScreen() {
   const { id: idString } = useLocalSearchParams();
@@ -12,6 +13,8 @@ export default function OrderDetailsScreen() {
 
   const { data: order, isLoading, error } = useOrderDetails(id);
 
+  useUpdateOrderSubscription(id);
+  
   if (isLoading) {
     return <ActivityIndicator />;
   }

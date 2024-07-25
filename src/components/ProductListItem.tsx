@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { Product } from "../types";
 import Colors from "../constants/Colors";
 import { Link, useSegments } from "expo-router";
+import RemoteImage from "./RemoteImage";
 
 type ProductListItemProps = {
   product: Product;
@@ -15,8 +16,10 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable style={styles.container}>
-        <Image
-          source={{ uri: product.image || "" }}
+        <RemoteImage
+          path={product.image}
+          //have a default fallback image
+          fallback=""
           style={styles.image}
           resizeMode="contain"
         />
