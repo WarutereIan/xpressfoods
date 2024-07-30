@@ -18,10 +18,10 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
         .from("product-images")
         .download(path, {
           //scaling down the image using supabase
-          transform: {
+          /* transform: {
             width: 50,
             height: 50,
-          },
+          }, */
         });
 
       if (error) {
@@ -39,9 +39,16 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
   }, [path]);
 
   if (!image) {
+    console.warn("no image");
   }
 
-  return <Image source={{ uri: image || fallback }} {...imageProps} />;
+  return (
+    <Image
+      source={{ uri: image || fallback }}
+      style={{ borderRadius: 10 }}
+      {...imageProps}
+    />
+  );
 };
 
 export default RemoteImage;

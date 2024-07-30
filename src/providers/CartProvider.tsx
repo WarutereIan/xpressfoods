@@ -72,6 +72,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   const checkout = () => {
+    //user first gets the place order modal instead, and then these functions can be called when they place the order
+    //call modal component for order confirmation
+    
+
     insertOrder(
       { total },
       {
@@ -91,6 +95,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       {
         onSuccess() {
           clearCart();
+          
           router.push(`/(user)/orders/${newOrder.id}`);
         },
       }

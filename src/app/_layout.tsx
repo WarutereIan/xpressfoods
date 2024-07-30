@@ -13,6 +13,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/src/components/useColorScheme";
 import CartProvider from "../providers/CartProvider";
 import QueryProvider from "../providers/QueryProviders";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -29,7 +30,12 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("../../assets/fonts/Gilroy-Regular.ttf"),
+    //SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
+    Gilroy: require("../../assets/fonts/Gilroy-Regular.ttf"),
+    GilroyBold: require("../../assets/fonts/Gilroy-Bold.ttf"),
+    Montserrat: require("@expo-google-fonts/montserrat/Montserrat_400Regular.ttf"),
+    MontserratBold: require("@expo-google-fonts/montserrat/Montserrat_700Bold.ttf"),
     ...FontAwesome.font,
   });
 
@@ -56,15 +62,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <QueryProvider>
-        <CartProvider>
-          <Stack>
-            <Stack.Screen name="(user)" options={{ headerShown: false }} />
-            <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-            <Stack.Screen name="cart" options={{ presentation: "modal" }} />
-          </Stack>
-        </CartProvider>
-      </QueryProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <QueryProvider>
+          <CartProvider>
+            <Stack>
+              <Stack.Screen name="(user)" options={{ headerShown: false }} />
+              <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+              <Stack.Screen name="cart" options={{ presentation: "modal" }} />
+            </Stack>
+          </CartProvider>
+        </QueryProvider>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }

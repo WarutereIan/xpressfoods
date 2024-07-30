@@ -31,10 +31,14 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 };
 
 const styles = StyleSheet.create({
-  title: { fontSize: 20, fontWeight: "bold", marginVertical: 10 },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 5,
+  },
   separator: {
-    marginVertical: 30,
-    height: 1,
+    marginVertical: 10,
+    height: 0.1,
     width: "80%",
   },
   price: { color: Colors.light.tint, fontWeight: "bold" },
@@ -43,10 +47,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   container: {
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: "#E2E2E2",
+    padding: 5,
+    borderRadius: 10,
     flex: 1,
     maxWidth: "50%",
+    textAlign: "center",
   },
 });

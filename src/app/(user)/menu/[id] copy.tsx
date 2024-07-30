@@ -1,20 +1,11 @@
-import products from "@/assets/data/products";
-import { useLocalSearchParams, Stack, useRouter, Link } from "expo-router";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-} from "react-native";
+import { useLocalSearchParams, Stack, useRouter } from "expo-router";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { useState } from "react";
 import Button from "@/src/components/Button";
 import { useCart } from "@/src/providers/CartProvider";
 import { PizzaSize } from "@/src/types";
-import { FontAwesome } from "@expo/vector-icons";
-import Colors from "@/src/constants/Colors";
 import { useProduct } from "@/src/api/products";
+import { ActivityIndicator } from "react-native";
 import RemoteImage from "@/src/components/RemoteImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
@@ -32,10 +23,6 @@ const ProductDetailsScreen = () => {
 
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
 
-  if (!product) {
-    return <Text>Product Not Found</Text>;
-  }
-
   if (isLoading) {
     return <ActivityIndicator />;
   }
@@ -50,34 +37,38 @@ const ProductDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: "Menu",
-          headerRight: () => (
-            <Link href={`/(admin)/menu/create?id=${id}`} asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="pencil"
-                    size={25}
-                    color={Colors.light.tint}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
       <Stack.Screen options={{ title: product?.name }} />
-      <RemoteImage
-        path={product.image}
-        fallback={product.image}
-        style={styles.image}
-      />
+      <RemoteImage path={product.image} fallback="" style={styles.image} />
 
-      <Text style={styles.title}>{product.name}</Text>
+      <Text>Select size</Text>
+      <View style={styles.sizes}>
+        {sizes.map((size) => (
+          <Pressable
+            onPress={() => {
+              setSelectedSize(size);
+            }}
+            style={[
+              styles.sizes,
+              {
+                backgroundColor: selectedSize === size ? "gainsboro" : "white",
+              },
+            ]}
+            key={size}
+          >
+            <Text
+              style={[
+                styles.sizeText,
+                { color: selectedSize === size ? "black" : "grey" },
+              ]}
+            >
+              {size}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
       <Text style={styles.price}>${product.price}</Text>
+      <Button onPress={addToCart} text="Add to Cart" />
     </View>
   );
 };
@@ -92,12 +83,27 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 1,
   },
-  title: {
-    fontSize: 20,
-  },
   price: {
     fontWeight: "bold",
     fontSize: 18,
+    marginTop: "auto",
+  },
+  sizes: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 10,
+  },
+  size: {
+    backgroundColor: "gainsboro",
+    width: 50,
+    aspectRatio: 1,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sizeText: {
+    fontSize: 20,
+    fontWeight: "500",
   },
 });
 

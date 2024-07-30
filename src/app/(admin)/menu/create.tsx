@@ -114,9 +114,10 @@ const CreateProductScreen = () => {
     if (!validateInput()) {
       return;
     }
-    console.warn("Creating Product, :", name);
 
     const imagePath = await uploadImage();
+
+    console.warn("Creating Product, :", imagePath);
 
     //save in db
     insertProduct(
