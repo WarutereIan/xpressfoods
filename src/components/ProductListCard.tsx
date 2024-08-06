@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
 const styles2 = StyleSheet.create({
   card: {
-    maxWidth: "50%",
+    maxWidth: "80%",
     flexDirection: "column",
     backgroundColor: "white",
     borderRadius: 8,

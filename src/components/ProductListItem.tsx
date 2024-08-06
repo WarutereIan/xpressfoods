@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 10,
     flex: 1,
-    maxWidth: "50%",
+    maxWidth: 110,
     textAlign: "center",
   },
 });

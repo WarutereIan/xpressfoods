@@ -44,7 +44,11 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
 
   return (
     <Image
-      source={{ uri: image || fallback }}
+      source={{
+        uri:
+          image ||
+          "https://www.nutritionadvance.com/wp-content/uploads/2018/01/green-arugula-leaves.jpg",
+      }}
       style={{ borderRadius: 10 }}
       {...imageProps}
     />

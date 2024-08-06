@@ -4,6 +4,7 @@ import { ProductListItem } from "@/src/components/ProductListItem";
 
 import { useProductList } from "@/src/api/products";
 import { ProductListCard } from "@/src/components/ProductListCard";
+import HomeCard from "@/src/components/HomeCard";
 
 export default function MenuScreen() {
   const { data: products, error, isLoading } = useProductList();
@@ -18,10 +19,10 @@ export default function MenuScreen() {
   return (
     <FlatList
       data={products}
-      renderItem={({ item }) => <ProductListCard product={item} />}
-      numColumns={2}
+      renderItem={({ item }) => <HomeCard />}
+      //numColumns={1}
       contentContainerStyle={{ gap: 10, padding: 10 }}
-      columnWrapperStyle={{ gap: 10 }}
+      //columnWrapperStyle={{ gap: 10 }}
     />
   );
 }
