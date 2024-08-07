@@ -12,26 +12,26 @@ Follow these steps to run the build in development mode:
 
 2. **Start Expo server**
 
-Launch the Expo development server:
+   Launch the Expo development server:
 
-    `npm start`
+   `npm start`
 
-This command will generate a QR code in your terminal.
+   This command will generate a QR code in your terminal.
 
 3. **Install Expo Go on your mobile device**
 
-Download and install the Expo Go app from your device's app store:
+   Download and install the Expo Go app from your device's app store:
 
-- [Expo Go for Android](https://play.google.com/store/apps/details?id=host.exp.exponent)
-- [Expo Go for iOS](https://apps.apple.com/us/app/expo-go/id982107779)
+   - [Expo Go for Android](https://play.google.com/store/apps/details?id=host.exp.exponent)
+   - [Expo Go for iOS](https://apps.apple.com/us/app/expo-go/id982107779)
 
 4. **Scan the QR code**
 
-Open Expo Go on your mobile device and scan the QR code displayed in your terminal (from step 2).
+   Open Expo Go on your mobile device and scan the QR code displayed in your terminal (from step 2).
 
 5. **Launch the app**
 
-After scanning the QR code, Expo Go will launch the app in its development build on your phone.
+   After scanning the QR code, Expo Go will launch the app in its development build on your phone.
 
 ## Troubleshooting
 
