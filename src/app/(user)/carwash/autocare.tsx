@@ -1,5 +1,6 @@
+import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Link } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,25 +10,105 @@ import {
   ScrollView,
 } from "react-native";
 
-const ServiceItem = ({ name, price, isHighlighted }) => (
-  <View style={[styles.serviceItem, isHighlighted && styles.highlightedItem]}>
+const ServiceItem = ({ name, price, isHighlighted, onSelect }) => (
+  <TouchableOpacity
+    style={[styles.serviceItem, isHighlighted && styles.highlightedItem]}
+    onPress={onSelect}
+  >
     <Text style={styles.serviceName}>{name}</Text>
     <Text style={styles.servicePrice}>{price}</Text>
-  </View>
+  </TouchableOpacity>
 );
 
 const AutoCareServicesScreen = () => {
+  const [selectedService, setSelectedService] = useState<number>(200);
+
+  const { addService, getCarMake } = useCarwash();
+
+  const carMake = getCarMake();
+
+  const confirmDetails = () => {
+    addService({
+      serviceName: services[selectedService - 1].service,
+      carType: carMake.class,
+      carModel: carMake.model,
+      price: services[selectedService - 1].service_price,
+      title: services[selectedService - 1].name,
+    });
+  };
+
   const services = [
-    { name: "Engine Steam Wash", price: "KSH 1,500" },
-    { name: "Vacuuming & Shampooing", price: "KSH 1,500" },
-    { name: "Vacuuming ( Dry )", price: "KSH 300" },
-    { name: "Leather Care", price: "KSH 500", highlighted: true },
-    { name: "Waxing", price: "KSH 2,000" },
-    { name: "Machine Polish", price: "KSH 1,500" },
-    { name: "Buffing", price: "KSH 4,000" },
-    { name: "Aircon Check & Refill", price: "KSH -" },
-    { name: "Carpet Cleaning", price: "KSH -" },
-    { name: "Home & Office Cleaning", price: "KSH -" },
+    {
+      name: "Engine Steam Wash",
+      price: "KSH 1,500",
+      service: "engine_steam_wash",
+      service_price: 1500,
+      id: 1,
+    },
+    {
+      name: "Vacuuming & Shampooing",
+      price: "KSH 1,500",
+      service: "vacuuming_and_shampooing",
+      service_price: 1500,
+      id: 2,
+    },
+    {
+      name: "Vacuuming ( Dry )",
+      price: "KSH 300",
+      service: "vacuuming_dry",
+      service_price: 300,
+      id: 3,
+    },
+    {
+      name: "Leather Care",
+      price: "KSH 500",
+      highlighted: true,
+      service: "leather_care",
+      service_price: 500,
+      id: 4,
+    },
+    {
+      name: "Waxing",
+      price: "KSH 2,000",
+      service: "waxing",
+      service_price: 2000,
+      id: 5,
+    },
+    {
+      name: "Machine Polish",
+      price: "KSH 1,500",
+      service: "machine_polish",
+      service_price: 1500,
+      id: 6,
+    },
+    {
+      name: "Buffing",
+      price: "KSH 4,000",
+      service: "buffing",
+      service_price: 4000,
+      id: 7,
+    },
+    {
+      name: "Aircon Check & Refill",
+      price: "KSH 2000",
+      service: "aircon_check_refill",
+      service_price: 2000,
+      id: 8,
+    },
+    {
+      name: "Carpet Cleaning",
+      price: "KSH 1000",
+      service: "carpet_cleaning",
+      service_price: 1000,
+      id: 9,
+    },
+    {
+      name: "Home & Office Cleaning",
+      price: "KSH 1500",
+      service: "home_and_office_cleaning",
+      service_price: 1500,
+      id: 10,
+    },
   ];
 
   return (
@@ -42,14 +123,18 @@ const AutoCareServicesScreen = () => {
 
         {services.map((service, index) => (
           <ServiceItem
-            key={index}
+            key={service.id}
             name={service.name}
             price={service.price}
-            isHighlighted={service.highlighted}
+            isHighlighted={selectedService == service.id}
+            onSelect={() => setSelectedService(service.id)}
           />
         ))}
         <Link href={"/(user)/carwash/booking"} asChild>
-          <TouchableOpacity style={styles.continueButton}>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={confirmDetails}
+          >
             <Text style={styles.continueButtonText}>Continue</Text>
           </TouchableOpacity>
         </Link>

@@ -1,3 +1,4 @@
+import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Picker } from "@react-native-picker/picker";
 import { Link } from "expo-router";
 import React, { useState } from "react";
@@ -12,6 +13,14 @@ import {
 
 const BookingScreen = () => {
   const [selectedClass, setSelectedClass] = useState("");
+  const [carBrand, setCarBrand] = useState("");
+
+  const { setCarMake } = useCarwash();
+
+  const confirmDetails = () => {
+    setCarMake({ class: selectedClass, model: carBrand });
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -34,16 +43,20 @@ const BookingScreen = () => {
             style={styles.picker}
           >
             <Picker.Item label="Select Class" value="" />
-            <Picker.Item label="Economy" value="economy" />
-            <Picker.Item label="Standard" value="standard" />
-            <Picker.Item label="Luxury" value="luxury" />
+            <Picker.Item label="Economy" value="Economy" />
+            <Picker.Item label="Standard" value="Standard" />
+            <Picker.Item label="Luxury" value="Luxury" />
           </Picker>
         </View>
 
-        <TextInput style={styles.input} placeholder="Car Brand" />
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setCarBrand(text)}
+          placeholder="Car Brand"
+        />
 
         <Link href={"/(user)/carwash/mainprices"} asChild>
-          <TouchableOpacity style={styles.bookButton}>
+          <TouchableOpacity style={styles.bookButton} onPress={confirmDetails}>
             <Text style={styles.bookButtonText}>Continue</Text>
           </TouchableOpacity>
         </Link>

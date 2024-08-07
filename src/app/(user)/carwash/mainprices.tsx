@@ -1,3 +1,4 @@
+import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Link } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -25,26 +26,46 @@ const ServiceOption = ({ title, description, price, isSelected, onSelect }) => (
 const ServicesScreen = () => {
   const [selectedService, setSelectedService] = useState(0);
 
+  const { addService, getCarMake } = useCarwash();
+
+  const carMake = getCarMake();
+
   const services = [
     {
       id: 1,
       title: "Basic Wash",
       description: "• Body Wash • Tyre Wash",
       price: "KSH 300",
+      service: "basic_wash",
+      service_price: 300,
     },
     {
       id: 2,
-      title: "Super Wash",
+      title: "SuperWash",
       description: "• Basic Wash • Interior Care\n• Vacuum • Dashboard Polish",
-      price: "KSH 2,000",
+      price: "KSH 2000",
+      service: "super_wash",
+      service_price: 2000,
     },
     {
       id: 3,
       title: "Deluxe Wash",
       description: "Super Wash • Auto Detailing",
       price: "KSH 3,000",
+      service: "deluxe_wash",
+      service_price: 3000,
     },
   ];
+
+  const confirmDetails = () => {
+    addService({
+      serviceName: services[selectedService - 1].service,
+      carType: carMake.class,
+      carModel: carMake.model,
+      price: services[selectedService - 1].service_price,
+      title: services[selectedService - 1].title,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,13 +87,19 @@ const ServicesScreen = () => {
         ))}
 
         <Link href={"/(user)/carwash/booking"} asChild>
-          <TouchableOpacity style={styles.continueButton}>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={confirmDetails}
+          >
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </Link>
 
         <Link href={"/(user)/carwash/autocare"} asChild>
-          <TouchableOpacity style={styles.moreServicesButton}>
+          <TouchableOpacity
+            style={styles.moreServicesButton}
+            onPress={confirmDetails}
+          >
             <Text style={styles.buttonText}>More Auto Care Services</Text>
           </TouchableOpacity>
         </Link>

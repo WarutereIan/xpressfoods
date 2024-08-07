@@ -1,53 +1,115 @@
+import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Link } from "expo-router";
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const BookingScreen = () => {
+  const { getServices, total, changeDeliveryType, set_DeliveryTime } =
+    useCarwash();
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [mode, setMode] = useState("date");
+  const [delivery, setDelivery] = useState<string>("pick_up");
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(Platform.OS === "ios");
+    setDate(currentDate);
+
+    if (Platform.OS === "android") {
+      if (mode === "date") {
+        // After setting the date, show the time picker
+        setMode("time");
+        setShowDatePicker(true);
+      } else {
+        // After setting the time, hide the picker
+        setMode("date");
+        setShowDatePicker(false);
+      }
+    }
+  };
+
+  const confirmDetails = () => {
+    set_DeliveryTime(date.toDateString());
+    changeDeliveryType(delivery);
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+    setMode("date");
+  };
+
+  const changeDelivery = (deliveryType: string) => {
+    changeDeliveryType(deliveryType);
+  };
+
+  let services = getServices();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.placedBooking}>Place Booking</Text>
       </View>
 
-      <View style={styles.serviceContainer}>
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceTitle}>Basic Wash</Text>
-          <Text style={styles.serviceDescription}>- Body Wash + Tyre Wash</Text>
-          <Text style={styles.servicePrice}>KSH 300</Text>
-        </View>
-        <View style={styles.serviceItem}>
-          <Text style={styles.serviceTitle}>Leather Care</Text>
-          <Text style={styles.servicePrice}>KSH 500</Text>
-        </View>
-      </View>
+      {services.map((service) => {
+        return (
+          <View style={styles.serviceItem}>
+            <Text style={styles.serviceTitle}>{service.title}</Text>
+            <Text style={styles.servicePrice}>KSH {service.price}</Text>
+          </View>
+        );
+      })}
 
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>Total</Text>
-        <Text style={styles.totalPrice}>KSH 800</Text>
+        <Text style={styles.totalPrice}>KSH {total}</Text>
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.pickUpButton}>
+        <TouchableOpacity
+          style={styles.pickUpButton}
+          onPress={() => setDelivery("pick_up")}
+        >
           <Text style={styles.buttonText}>Pick Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.selfServiceButton}>
+        <TouchableOpacity
+          style={styles.selfServiceButton}
+          onPress={() => setDelivery("self_service")}
+        >
           <Text style={styles.buttonText}>Self Service</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.dateTimeContainer}>
-        <View style={styles.dateTimeBox}>
-          <Text style={styles.dateTimeLabel}>Date</Text>
-          <Text style={styles.dateTimeValue}>4 AUG</Text>
-        </View>
-        <View style={styles.dateTimeBox}>
-          <Text style={styles.dateTimeLabel}>Time</Text>
-          <Text style={styles.dateTimeValue}>10:00AM</Text>
-        </View>
-      </View>
+      <TouchableOpacity style={styles.dateButton} onPress={showDatepicker}>
+        <Text style={styles.dateButtonText}>
+          {date.toLocaleDateString()}{" "}
+          {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </Text>
+      </TouchableOpacity>
+
+      {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
 
       <Link href={"/(user)/carwash/payment"} asChild>
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={confirmDetails}
+        >
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
       </Link>
@@ -150,6 +212,16 @@ const styles = StyleSheet.create({
   continueButtonText: {
     color: "white",
     textAlign: "center",
+    fontWeight: "bold",
+  },
+  dateButton: {
+    backgroundColor: "#ddd",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  dateButtonText: {
     fontWeight: "bold",
   },
 });

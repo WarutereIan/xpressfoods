@@ -47,7 +47,8 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.10",
-    "@react-native-picker/picker": "2.7.5"
+    "@react-native-picker/picker": "2.7.5",
+    "@react-native-community/datetimepicker": "8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

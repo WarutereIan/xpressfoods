@@ -1,8 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo
+import { useCarwash } from "@/src/providers/CarwashProvider";
 
 const ReviewSummaryScreen = () => {
+  const {
+    delivery_time,
+    services,
+    getDeliveryType,
+    total,
+    checkout,
+    payment_mode,
+  } = useCarwash();
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
@@ -14,34 +24,48 @@ const ReviewSummaryScreen = () => {
       <View style={styles.summaryCard}>
         <View style={styles.row}>
           <Text style={styles.label}>Booking Date</Text>
-          <Text style={styles.value}>4 AUG 2024 10:00AM</Text>
+          <Text style={styles.value}>{delivery_time}</Text>
         </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Car</Text>
-          <Text style={styles.value}>SUV</Text>
-        </View>
+
+        {services.map((service) => {
+          return (
+            <View style={styles.row}>
+              <Text style={styles.label}>Car</Text>
+              <Text style={styles.value}>{service.carType}</Text>
+            </View>
+          );
+        })}
+
         <View style={styles.row}>
           <Text style={styles.label}>Service Type</Text>
-          <Text style={styles.value}>Self Service</Text>
+          <Text style={styles.value}>
+            {getDeliveryType() == "pick_up" ? "Pick Up" : "Self Service"}
+          </Text>
         </View>
         <View style={styles.divider} />
-        <View style={styles.row}>
-          <Text style={styles.label}>Basic Wash</Text>
-          <Text style={styles.value}>KES 300</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Leather Care</Text>
-          <Text style={styles.value}>KES 500</Text>
-        </View>
+        {services.map((service) => {
+          return (
+            <View style={styles.row}>
+              <Text style={styles.label}>{service.title}</Text>
+              <Text style={styles.value}>KES {service.price}</Text>
+            </View>
+          );
+        })}
+
         <View style={styles.divider} />
         <View style={styles.row}>
           <Text style={styles.totalLabel}>Total</Text>
-          <Text style={styles.totalValue}>KES 800</Text>
+          <Text style={styles.totalValue}>KES {total}</Text>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.row}>
+          <Text style={styles.totalLabel}>Payment Method</Text>
+          <Text style={styles.totalValue}>{payment_mode}</Text>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.confirmButton}>
-        <Text style={styles.confirmText}>Confirm Payment</Text>
+      <TouchableOpacity style={styles.confirmButton} onPress={checkout}>
+        <Text style={styles.confirmText}>Confirm Booking</Text>
       </TouchableOpacity>
     </View>
   );

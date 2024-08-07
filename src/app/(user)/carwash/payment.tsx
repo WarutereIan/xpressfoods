@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo
 import { Link } from "expo-router";
+import { useCarwash } from "@/src/providers/CarwashProvider";
 
 const PaymentMethodsScreen = () => {
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState("");
+
+  const { setPaymentMode } = useCarwash();
 
   return (
     <View style={styles.container}>
@@ -17,9 +20,9 @@ const PaymentMethodsScreen = () => {
       <TouchableOpacity
         style={[
           styles.methodButton,
-          selectedMethod === "cash" && styles.selectedMethod,
+          selectedMethod === "CASH" && styles.selectedMethod,
         ]}
-        onPress={() => setSelectedMethod("cash")}
+        onPress={() => setSelectedMethod("CASH")}
       >
         <Text style={styles.methodText}>Cash</Text>
         <Ionicons name="card-outline" size={24} color="black" />
@@ -28,7 +31,7 @@ const PaymentMethodsScreen = () => {
       <TouchableOpacity
         style={[
           styles.methodButton,
-          selectedMethod === "mpesa" && styles.selectedMethod,
+          selectedMethod === "MPESA" && styles.selectedMethod,
         ]}
         onPress={() => setSelectedMethod("mpesa")}
       >
@@ -36,7 +39,12 @@ const PaymentMethodsScreen = () => {
       </TouchableOpacity>
 
       <Link href={"/(user)/carwash/review"} asChild>
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={() => {
+            setPaymentMode(selectedMethod);
+          }}
+        >
           <Text style={styles.continueText}>Continue</Text>
         </TouchableOpacity>
       </Link>

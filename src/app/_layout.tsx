@@ -14,6 +14,8 @@ import { useColorScheme } from "@/src/components/useColorScheme";
 import CartProvider from "../providers/CartProvider";
 import QueryProvider from "../providers/QueryProviders";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CarwashProvider from "../providers/CarwashProvider";
+import AuthProvider from "../providers/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -63,15 +65,28 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <QueryProvider>
-          <CartProvider>
-            <Stack>
-              <Stack.Screen name="(user)" options={{ headerShown: false }} />
-              <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-              <Stack.Screen name="cart" options={{ presentation: "modal" }} />
-            </Stack>
-          </CartProvider>
-        </QueryProvider>
+        <AuthProvider>
+          <QueryProvider>
+            <CarwashProvider>
+              <CartProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="(user)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(admin)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="cart"
+                    options={{ presentation: "modal" }}
+                  />
+                </Stack>
+              </CartProvider>
+            </CarwashProvider>
+          </QueryProvider>
+        </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
   );
