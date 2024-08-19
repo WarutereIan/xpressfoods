@@ -1,5 +1,5 @@
 import { useCarwash } from "@/src/providers/CarwashProvider";
-import { Link } from "expo-router";
+import { Link, router, useSegments } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -7,6 +7,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  Image,
+  Appearance,
+  ScrollView,
+  Alert,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -17,6 +21,10 @@ const BookingScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [mode, setMode] = useState("date");
   const [delivery, setDelivery] = useState<string>("pick_up");
+
+  const colorScheme = Appearance.getColorScheme();
+
+  const segments = useSegments();
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -37,8 +45,12 @@ const BookingScreen = () => {
   };
 
   const confirmDetails = () => {
+    if (total == 0) {
+      return Alert.alert("Attention", "Please Select a Service");
+    }
     set_DeliveryTime(date.toDateString());
     changeDeliveryType(delivery);
+    router.navigate(`${segments[0]}/carwash/payment`);
   };
 
   const showDatepicker = () => {
@@ -50,22 +62,32 @@ const BookingScreen = () => {
     changeDeliveryType(deliveryType);
   };
 
-  let services = getServices();
+  const { autoServices, services } = useCarwash();
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.placedBooking}>Place Booking</Text>
+        <Image source={require("@/assets/images/carwashlogo.png")} />
       </View>
 
-      {services.map((service) => {
-        return (
-          <View style={styles.serviceItem}>
-            <Text style={styles.serviceTitle}>{service.title}</Text>
-            <Text style={styles.servicePrice}>KSH {service.price}</Text>
-          </View>
-        );
-      })}
+      <ScrollView>
+        {services.map((service) => {
+          return (
+            <View style={styles.serviceItem}>
+              <Text style={styles.serviceTitle}>{service.title}</Text>
+              <Text style={styles.servicePrice}>KSH {service.price}</Text>
+            </View>
+          );
+        })}
+        {autoServices.map((service) => {
+          return (
+            <View style={styles.serviceItem}>
+              <Text style={styles.serviceTitle}>{service.title}</Text>
+              <Text style={styles.servicePrice}>KSH {service.price}</Text>
+            </View>
+          );
+        })}
+      </ScrollView>
 
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>Total</Text>
@@ -74,13 +96,21 @@ const BookingScreen = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.pickUpButton}
+          style={
+            delivery == "pick_up"
+              ? styles.selectedButton
+              : styles.unselectedButton
+          }
           onPress={() => setDelivery("pick_up")}
         >
           <Text style={styles.buttonText}>Pick Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.selfServiceButton}
+          style={
+            delivery == "self_service"
+              ? styles.selectedButton
+              : styles.unselectedButton
+          }
           onPress={() => setDelivery("self_service")}
         >
           <Text style={styles.buttonText}>Self Service</Text>
@@ -100,19 +130,15 @@ const BookingScreen = () => {
           value={date}
           mode={mode}
           is24Hour={true}
-          display="default"
+          display="spinner"
           onChange={onDateChange}
+          minimumDate={new Date()}
         />
       )}
 
-      <Link href={"/(user)/carwash/payment"} asChild>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={confirmDetails}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </Link>
+      <TouchableOpacity style={styles.continueButton} onPress={confirmDetails}>
+        <Text style={styles.continueButtonText}>Continue</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -165,22 +191,22 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     marginBottom: 20,
   },
-  pickUpButton: {
+  unselectedButton: {
     backgroundColor: "gray",
     padding: 10,
     borderRadius: 5,
     flex: 1,
-    marginRight: 10,
+    marginHorizontal: 10,
   },
-  selfServiceButton: {
+  selectedButton: {
     backgroundColor: "#8BC34A",
     padding: 10,
     borderRadius: 5,
     flex: 1,
-    marginLeft: 10,
+    marginHorizontal: 10,
   },
   buttonText: {
     color: "white",

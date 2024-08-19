@@ -1,6 +1,7 @@
+import { useAuth } from "@/src/providers/AuthProvider";
 import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Picker } from "@react-native-picker/picker";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -9,28 +10,48 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 
 const BookingScreen = () => {
   const [selectedClass, setSelectedClass] = useState("");
   const [carBrand, setCarBrand] = useState("");
 
+  const router = useRouter();
+
   const { setCarMake } = useCarwash();
 
+  const { session } = useAuth();
+
   const confirmDetails = () => {
+    if (selectedClass.length == 0 || carBrand.length == 0) {
+      return Alert.alert("Attention", "Please enter all Details");
+    }
     setCarMake({ class: selectedClass, model: carBrand });
+    router.push("/(user)/carwash/mainprices");
+  };
+
+  const viewBookings = () => {
+    //check if user logged is logged in
+    if (!session) {
+      return Alert.alert(
+        "Attention",
+        "You need to be logged in for user history"
+      );
+    }
+    router.navigate("/(user)/carwash/mybookings");
   };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require("@/assets/images/special-offer-banner.png")}
+        source={require("@/assets/images/offer.png")}
         style={styles.jeepImage}
       />
 
       <View style={styles.bookingForm}>
         <View style={styles.ultraDetailingBadge}>
-          <Text style={styles.badgeText}>ULTRA DETAILING CAR WASH</Text>
+          <Image source={require("@/assets/images/carwashlogo.png")} />
         </View>
 
         <Text style={styles.bookingTitle}>Effortless</Text>
@@ -43,9 +64,8 @@ const BookingScreen = () => {
             style={styles.picker}
           >
             <Picker.Item label="Select Class" value="" />
-            <Picker.Item label="Economy" value="Economy" />
-            <Picker.Item label="Standard" value="Standard" />
-            <Picker.Item label="Luxury" value="Luxury" />
+            <Picker.Item label="Saloon" value="Saloon" />
+            <Picker.Item label="SUV" value="SUV" />
           </Picker>
         </View>
 
@@ -55,11 +75,12 @@ const BookingScreen = () => {
           placeholder="Car Brand"
         />
 
-        <Link href={"/(user)/carwash/mainprices"} asChild>
-          <TouchableOpacity style={styles.bookButton} onPress={confirmDetails}>
-            <Text style={styles.bookButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity style={styles.bookButton} onPress={confirmDetails}>
+          <Text style={styles.bookButtonText}>Continue</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bookingsButton} onPress={viewBookings}>
+          <Text style={styles.bookButtonText}>My Bookings</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -94,7 +115,9 @@ const styles = StyleSheet.create({
   jeepImage: {
     width: "100%",
     height: 150,
-    resizeMode: "contain",
+    resizeMode: "stretch",
+    borderRadius: 15,
+    marginBottom: 10,
   },
   bookingForm: {
     backgroundColor: "white",
@@ -102,11 +125,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   ultraDetailingBadge: {
-    backgroundColor: "#333",
+    //backgroundColor: "#333",
     borderRadius: 20,
     padding: 10,
-    alignSelf: "flex-start",
+    //alignSelf: "flex-start",
     marginBottom: 10,
+    alignItems: "center",
   },
   badgeText: {
     color: "white",
@@ -119,7 +143,7 @@ const styles = StyleSheet.create({
   bookingSubtitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#7CFC00",
+    color: "#8bc34a",
     marginBottom: 20,
   },
   input: {
@@ -130,10 +154,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bookButton: {
-    backgroundColor: "#7CFC00",
+    backgroundColor: "#8bc34a",
     borderRadius: 5,
     padding: 15,
     alignItems: "center",
+  },
+  bookingsButton: {
+    backgroundColor: "#8bc34a",
+    borderRadius: 5,
+    padding: 15,
+    alignItems: "center",
+    marginTop: 10,
   },
   bookButtonText: {
     color: "white",

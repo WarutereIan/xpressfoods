@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.warutereian.xpressfoods"
     },
     "web": {
       "bundler": "metro",
@@ -42,6 +43,14 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e4ca60fa-25c3-4f3d-a04c-700de1ef5e41"
+      }
     }
   }
 }

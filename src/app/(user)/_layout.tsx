@@ -35,7 +35,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="index" options={{ href: null }} />
 
-      <Tabs.Screen
+      {/*  <Tabs.Screen
         name="menu"
         options={{
           title: "Menu ",
@@ -52,13 +52,21 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="carwash"
         options={{
           title: "Carwash",
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="carwashAdmin"
+        options={{
+          title: "Carwash Admin",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
         }}
       />
     </Tabs>

@@ -37,7 +37,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="index" options={{ href: null }} />
 
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="menu"
         options={{
           title: "Menu ",
@@ -54,7 +54,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
-      />
+      /> */}
     </Tabs>
   );
 }

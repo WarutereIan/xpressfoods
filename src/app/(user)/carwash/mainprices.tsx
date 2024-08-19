@@ -1,5 +1,5 @@
 import { useCarwash } from "@/src/providers/CarwashProvider";
-import { Link } from "expo-router";
+import { Link, useRouter, useSegments } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -8,6 +8,8 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Alert,
+  Image,
 } from "react-native";
 
 const ServiceOption = ({ title, description, price, isSelected, onSelect }) => (
@@ -24,13 +26,19 @@ const ServiceOption = ({ title, description, price, isSelected, onSelect }) => (
 );
 
 const ServicesScreen = () => {
-  const [selectedService, setSelectedService] = useState(0);
+  const [selectedService, setSelectedService] = useState(100);
 
-  const { addService, getCarMake } = useCarwash();
+  const { addService, getCarMake, clearServices } = useCarwash();
 
   const carMake = getCarMake();
 
-  const services = [
+  const carClass = carMake.class;
+
+  const router = useRouter();
+
+  let services = [];
+
+  const servicesSaloon = [
     {
       id: 1,
       title: "Basic Wash",
@@ -56,8 +64,43 @@ const ServicesScreen = () => {
       service_price: 3000,
     },
   ];
+  const servicesSUV = [
+    {
+      id: 1,
+      title: "Basic Wash",
+      description: "• Body Wash • Tyre Wash",
+      price: "KSH 300",
+      service: "basic_wash",
+      service_price: 400,
+    },
+    {
+      id: 2,
+      title: "SuperWash",
+      description: "• Basic Wash • Interior Care\n• Vacuum • Dashboard Polish",
+      price: "KSH 2000",
+      service: "super_wash",
+      service_price: 4000,
+    },
+    {
+      id: 3,
+      title: "Deluxe Wash",
+      description: "Super Wash • Auto Detailing",
+      price: "KSH 3,000",
+      service: "deluxe_wash",
+      service_price: 5000,
+    },
+  ];
 
-  const confirmDetails = () => {
+  carClass == "Saloon" ? (services = servicesSaloon) : (services = servicesSUV);
+
+  const segments = useSegments();
+
+  const confirmDetailsOnContinue = () => {
+    if (selectedService == 100) {
+      clearServices();
+      return router.navigate(`${segments[0]}/carwash/booking`);
+    }
+
     addService({
       serviceName: services[selectedService - 1].service,
       carType: carMake.class,
@@ -65,14 +108,26 @@ const ServicesScreen = () => {
       price: services[selectedService - 1].service_price,
       title: services[selectedService - 1].title,
     });
+
+    router.push("/(user)/carwash/booking");
+  };
+  const confirmDetails = () => {
+    if (selectedService != 100)
+      return addService({
+        serviceName: services[selectedService - 1].service,
+        carType: carMake.class,
+        carModel: carMake.model,
+        price: services[selectedService - 1].service_price,
+        title: services[selectedService - 1].title,
+      });
+    return clearServices();
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <View style={styles.backButton} />
-          <Text style={styles.headerTitle}>Main Services</Text>
+          <Image source={require("@/assets/images/carwashlogo.png")} />
         </View>
 
         {services.map((service) => (
@@ -82,18 +137,20 @@ const ServicesScreen = () => {
             description={service.description}
             price={service.price}
             isSelected={selectedService === service.id}
-            onSelect={() => setSelectedService(service.id)}
+            onSelect={() => {
+              selectedService === service.id
+                ? setSelectedService(100)
+                : setSelectedService(service.id);
+            }}
           />
         ))}
 
-        <Link href={"/(user)/carwash/booking"} asChild>
-          <TouchableOpacity
-            style={styles.continueButton}
-            onPress={confirmDetails}
-          >
-            <Text style={styles.buttonText}>Continue</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={confirmDetailsOnContinue}
+        >
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
 
         <Link href={"/(user)/carwash/autocare"} asChild>
           <TouchableOpacity
@@ -117,7 +174,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     marginBottom: 20,
   },

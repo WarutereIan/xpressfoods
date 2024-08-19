@@ -1,6 +1,6 @@
 import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,36 +8,30 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Image,
 } from "react-native";
 
-const ServiceItem = ({ name, price, isHighlighted, onSelect }) => (
-  <TouchableOpacity
-    style={[styles.serviceItem, isHighlighted && styles.highlightedItem]}
-    onPress={onSelect}
-  >
+const ServiceItem = ({ name, price }) => (
+  <>
     <Text style={styles.serviceName}>{name}</Text>
     <Text style={styles.servicePrice}>{price}</Text>
-  </TouchableOpacity>
+  </>
 );
 
 const AutoCareServicesScreen = () => {
-  const [selectedService, setSelectedService] = useState<number>(200);
+  const [selectedServices, setSelectedServices] = useState<any[]>([]);
+  const [highlightedServices, setHighlightedServices] = useState<string[]>([]);
+  const [isUpdating, setIsUpdating] = useState(true);
 
-  const { addService, getCarMake } = useCarwash();
+  const { setMoreServices, getCarMake } = useCarwash();
 
   const carMake = getCarMake();
 
-  const confirmDetails = () => {
-    addService({
-      serviceName: services[selectedService - 1].service,
-      carType: carMake.class,
-      carModel: carMake.model,
-      price: services[selectedService - 1].service_price,
-      title: services[selectedService - 1].name,
-    });
-  };
+  const carClass = carMake.class;
 
-  const services = [
+  let services = [];
+
+  const servicesSaloon = [
     {
       name: "Engine Steam Wash",
       price: "KSH 1,500",
@@ -47,22 +41,22 @@ const AutoCareServicesScreen = () => {
     },
     {
       name: "Vacuuming & Shampooing",
-      price: "KSH 1,500",
+      price: "KSH 2,000",
       service: "vacuuming_and_shampooing",
-      service_price: 1500,
+      service_price: 2000,
       id: 2,
     },
     {
       name: "Vacuuming ( Dry )",
-      price: "KSH 300",
+      price: "KSH 200",
       service: "vacuuming_dry",
-      service_price: 300,
+      service_price: 200,
       id: 3,
     },
     {
       name: "Leather Care",
       price: "KSH 500",
-      highlighted: true,
+
       service: "leather_care",
       service_price: 500,
       id: 4,
@@ -76,9 +70,9 @@ const AutoCareServicesScreen = () => {
     },
     {
       name: "Machine Polish",
-      price: "KSH 1,500",
+      price: "KSH 2,000",
       service: "machine_polish",
-      service_price: 1500,
+      service_price: 2000,
       id: 6,
     },
     {
@@ -92,7 +86,80 @@ const AutoCareServicesScreen = () => {
       name: "Aircon Check & Refill",
       price: "KSH 2000",
       service: "aircon_check_refill",
+      service_price: 4000,
+      id: 8,
+    },
+    {
+      name: "Carpet Cleaning",
+      price: "KSH 1000",
+      service: "carpet_cleaning",
+      service_price: 1000,
+      id: 9,
+    },
+    {
+      name: "Home & Office Cleaning",
+      price: "KSH 1500",
+      service: "home_and_office_cleaning",
+      service_price: 1500,
+      id: 10,
+    },
+  ];
+  const servicesSUV = [
+    {
+      name: "Engine Steam Wash",
+      price: "KSH 2,000",
+      service: "engine_steam_wash",
       service_price: 2000,
+      id: 1,
+    },
+    {
+      name: "Vacuuming & Shampooing",
+      price: "KSH 1,500",
+      service: "vacuuming_and_shampooing",
+      service_price: 2500,
+      id: 2,
+    },
+    {
+      name: "Vacuuming ( Dry )",
+      price: "KSH 300",
+      service: "vacuuming_dry",
+      service_price: 300,
+      id: 3,
+    },
+    {
+      name: "Leather Care",
+      price: "KSH 700",
+
+      service: "leather_care",
+      service_price: 700,
+      id: 4,
+    },
+    {
+      name: "Waxing",
+      price: "KSH 3,000",
+      service: "waxing",
+      service_price: 3000,
+      id: 5,
+    },
+    {
+      name: "Machine Polish",
+      price: "KSH 3,500",
+      service: "machine_polish",
+      service_price: 3000,
+      id: 6,
+    },
+    {
+      name: "Buffing",
+      price: "KSH 5,000",
+      service: "buffing",
+      service_price: 5000,
+      id: 7,
+    },
+    {
+      name: "Aircon Check & Refill",
+      price: "KSH 4000",
+      service: "aircon_check_refill",
+      service_price: 4000,
       id: 8,
     },
     {
@@ -111,34 +178,105 @@ const AutoCareServicesScreen = () => {
     },
   ];
 
+  carClass == "Saloon" ? (services = servicesSaloon) : (services = servicesSUV);
+
+  const confirmDetails = () => {
+    while (!isUpdating) {
+      let finalList: any[] = [];
+
+      selectedServices?.map((selectedService: any) => {
+        finalList.push({
+          serviceName: selectedService.service,
+          carType: carMake.class,
+          carModel: carMake.model,
+          price: selectedService.service_price,
+          title: selectedService.name,
+        });
+      });
+
+      setMoreServices(finalList);
+
+      setIsUpdating(true);
+
+      return;
+    }
+  };
+
+  useEffect(() => {
+    setIsUpdating(false);
+  }, [selectedServices]);
+
+  const removeServiceFromList = (name: string) => {
+    //search for service name and service in respective arrays, then remove them
+    //for highlighted service
+    const highlighted = [...highlightedServices];
+    const selected = [...selectedServices];
+
+    let objIndex = -1;
+
+    selected.map((obj, index) => {
+      if (obj.service == name) {
+        objIndex = index;
+      }
+    });
+
+    if (objIndex > -1) {
+      selected.splice(objIndex, 1);
+      setSelectedServices([...selected]);
+    }
+
+    highlighted.splice(highlighted.indexOf(name), 1);
+
+    setHighlightedServices([...highlighted]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <View style={styles.backButton} />
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>More Auto Care Services</Text>
-          </View>
+      <View style={styles.header}>
+        <Image
+          style={styles.backButton}
+          source={require(`@/assets/images/carwashlogo.png`)}
+        />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>More Auto Care Services</Text>
         </View>
-
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {services.map((service, index) => (
-          <ServiceItem
-            key={service.id}
-            name={service.name}
-            price={service.price}
-            isHighlighted={selectedService == service.id}
-            onSelect={() => setSelectedService(service.id)}
-          />
-        ))}
-        <Link href={"/(user)/carwash/booking"} asChild>
           <TouchableOpacity
-            style={styles.continueButton}
-            onPress={confirmDetails}
+            style={[
+              styles.serviceItem,
+              highlightedServices.includes(service.service) &&
+                styles.highlightedItem,
+            ]}
+            onPress={() => {
+              if (highlightedServices.includes(service.service)) {
+                //get index of th object in the array
+
+                setIsUpdating(true);
+                removeServiceFromList(service.service);
+              } else {
+                setHighlightedServices([
+                  ...highlightedServices,
+                  service.service,
+                ]);
+                setIsUpdating(true);
+                setSelectedServices([...selectedServices, service]);
+              }
+            }}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <ServiceItem name={service.name} price={service.price} />
           </TouchableOpacity>
-        </Link>
+        ))}
       </ScrollView>
+      <Link href={"/(user)/carwash/booking"} asChild>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={confirmDetails}
+        >
+          <Text style={styles.continueButtonText}>Continue</Text>
+        </TouchableOpacity>
+      </Link>
     </SafeAreaView>
   );
 };
@@ -155,12 +293,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 20,
+    paddingLeft: 20,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#ccc",
+    width: 100,
+    height: 100,
+    //borderRadius: 20,
+    //backgroundColor: "#ccc",
   },
   titleContainer: {
     flex: 1,
@@ -201,6 +341,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     marginTop: 20,
+    marginHorizontal: 20,
   },
   continueButtonText: {
     color: "#fff",

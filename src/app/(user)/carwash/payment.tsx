@@ -33,7 +33,7 @@ const PaymentMethodsScreen = () => {
           styles.methodButton,
           selectedMethod === "MPESA" && styles.selectedMethod,
         ]}
-        onPress={() => setSelectedMethod("mpesa")}
+        onPress={() => setSelectedMethod("MPESA")}
       >
         <Text style={styles.methodText}>M-PESA</Text>
       </TouchableOpacity>

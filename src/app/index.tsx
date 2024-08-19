@@ -20,7 +20,7 @@ const index = () => {
   }
 
   if (!isAdmin) {
-    return <Redirect href={"/(user)"} />;
+    return <Redirect href={"/(user)/carwashAdmin"} />;
   }
 
   if (profile?.group === "ADMIN") {

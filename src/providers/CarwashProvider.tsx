@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CartItem, Product } from "../types";
 import { randomUUID } from "expo-crypto";
 import { useInsertOrder } from "../api/orders";
@@ -26,6 +32,9 @@ type ServiceType = {
 
 type CarwashContextType = {
   services: ServiceType[];
+  autoServices: [];
+  clearServices: () => void;
+  setMoreServices: (moreServices: any[]) => void;
   addService: (service: ServiceType) => void;
   total: number;
   checkout: () => void;
@@ -38,6 +47,12 @@ type CarwashContextType = {
   changeDeliveryType: (deliveryType: string) => {};
   delivery_time: any;
   set_DeliveryTime: (time: any) => {};
+  rebook: (
+    services_requested: [],
+    payment_method: string,
+    total_amount: number,
+    pick_up_method: string
+  ) => {};
 };
 
 type CarMake = {
@@ -48,6 +63,7 @@ type CarMake = {
 const CarwashContext = createContext<CarwashContextType>({
   services: [],
   addService: () => {},
+  clearServices: () => {},
   total: 0,
   payment_mode: "",
   checkout: () => {},
@@ -59,6 +75,9 @@ const CarwashContext = createContext<CarwashContextType>({
   changeDeliveryType: (deliveryType: string) => {},
   delivery_time: "",
   set_DeliveryTime: (time: any) => {},
+  rebook: () => {},
+  autoServices: [],
+  setMoreServices: (moreServices: any[]) => {},
 });
 
 const CarwashProvider = ({ children }: PropsWithChildren) => {
@@ -70,6 +89,7 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
   });
   const [deliveryType, setDeliveryType] = useState<string>("");
   const [deliveryTime, setDeliveryTime] = useState();
+  const [autoServices, setAutoServices] = useState<any>([]);
 
   const { session } = useAuth();
 
@@ -78,6 +98,10 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
 
   const delivery_time = deliveryTime;
   const payment_mode = paymentMethod;
+
+  const setMoreServices = (moreServices: any[]) => {
+    setAutoServices(moreServices);
+  };
 
   const set_DeliveryTime = (time: any) => {
     setDeliveryTime(time);
@@ -104,6 +128,9 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
     return services;
   };
 
+  const clearServices = () => {
+    setServices([]);
+  };
   const addService = (service: ServiceType) => {
     //check if exists already
     let serviceExists = services.find(
@@ -114,45 +141,75 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
       return;
     }
 
-    setServices([service, ...services]);
+    setServices([service]);
   };
 
   const setPaymentMode = (paymentMode: string) => {
     setPaymentMethod(paymentMode);
   };
 
-  const total = services.reduce((sum, item) => (sum += item.price), 0);
+  const total =
+    services.reduce((sum, item) => (sum += item.price), 0) +
+    autoServices.reduce((sum, item) => (sum += item.price), 0);
 
- function arrayToObject<T>(array: T[]): { [key: number]: T } {
-   return Object.assign({}, array);
- }
+  function arrayToObject<T>(array: T[]): { [key: number]: T } {
+    return Object.assign({}, array);
+  }
 
   const clearCarWashCart = () => {
     setServices([]);
   };
 
-  const checkout = () => {
-    let servicesObj: any = arrayToObject(services);
-
-    
-
-    console.log({
-      services_requested: servicesObj,
-      payment_method: paymentMethod,
+  const rebook = (
+    services_requested: [],
+    payment_method: string,
+    total_amount: string,
+    pick_up_method: string
+  ) => {
+    const price = parseInt(total_amount.replace("KES ", ""));
+    const order = {
+      services_requested: services_requested,
+      payment_method: payment_method,
       created_by: session?.user.id,
-      total_amount: total,
-    });
+      total_amount: price,
+      pick_up_method: pick_up_method,
+    };
 
+    insertCarwashOrder(order, {
+      onSuccess() {
+        clearCarWashCart();
+        router.navigate("/(user)/carwash/mybookings");
+      },
+      onError(error) {
+        console.log(error);
+
+        /* Alert.alert("Error", "Could not create order, diagnosing", [
+            {
+              text: "Cancel",
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => {},
+            },
+          ]); */
+      },
+    });
+  };
+
+  const checkout = () => {
     insertCarwashOrder(
       {
-        services_requested: services,
+        services_requested: [...services, ...autoServices],
         payment_method: paymentMethod,
         created_by: session?.user.id,
         total_amount: total,
+        pick_up_method: deliveryType,
       },
       {
         onSuccess() {
           clearCarWashCart();
+          router.push("/(user)/carwash/finalScreen");
         },
         onError(error) {
           console.log(error);
@@ -188,6 +245,10 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
         set_DeliveryTime,
         delivery_time,
         payment_mode,
+        rebook,
+        setMoreServices,
+        autoServices,
+        clearServices,
       }}
     >
       {children}

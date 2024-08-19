@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo
 import { useCarwash } from "@/src/providers/CarwashProvider";
 
@@ -11,10 +17,11 @@ const ReviewSummaryScreen = () => {
     total,
     checkout,
     payment_mode,
+    autoServices,
   } = useCarwash();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
@@ -43,14 +50,24 @@ const ReviewSummaryScreen = () => {
           </Text>
         </View>
         <View style={styles.divider} />
-        {services.map((service) => {
-          return (
-            <View style={styles.row}>
-              <Text style={styles.label}>{service.title}</Text>
-              <Text style={styles.value}>KES {service.price}</Text>
-            </View>
-          );
-        })}
+        <ScrollView>
+          {services.map((service) => {
+            return (
+              <View style={styles.row}>
+                <Text style={styles.label}>{service.title}</Text>
+                <Text style={styles.value}>KES {service.price}</Text>
+              </View>
+            );
+          })}
+          {autoServices.map((service: any) => {
+            return (
+              <View style={styles.row}>
+                <Text style={styles.label}>{service.title}</Text>
+                <Text style={styles.value}>KES {service.price}</Text>
+              </View>
+            );
+          })}
+        </ScrollView>
 
         <View style={styles.divider} />
         <View style={styles.row}>
@@ -67,7 +84,7 @@ const ReviewSummaryScreen = () => {
       <TouchableOpacity style={styles.confirmButton} onPress={checkout}>
         <Text style={styles.confirmText}>Confirm Booking</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
