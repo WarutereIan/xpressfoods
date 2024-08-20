@@ -1,10 +1,47 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useInsertUserProfile } from "@/src/api/user";
+import { useAuth } from "@/src/providers/AuthProvider";
+import { router } from "expo-router";
 
 const LocationSelectionScreen = () => {
   const [zone, setZone] = useState("Tilisi");
   const [area, setArea] = useState("");
+
+  const { userName, session } = useAuth();
+  const { mutate: insertProfile } = useInsertUserProfile();
+
+  const onPress = () => {
+    if (!zone || !area) {
+      return Alert.alert("Please Provide Location Details");
+    }
+
+    insertProfile(
+      {
+        name: userName,
+        location: zone,
+        area: area,
+        user_id: session?.user.id,
+      },
+      {
+        onSuccess() {
+          router.navigate("/(utility-screens)/home");
+        },
+        onError(error) {
+          return Alert.alert(error.message);
+        },
+      }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -14,10 +51,10 @@ const LocationSelectionScreen = () => {
       />
 
       <Text style={styles.title}>Select Your Location</Text>
-      <Text style={styles.subtitle}>
+      {/* <Text style={styles.subtitle}>
         Swithch on your location to stay in tune with what's happening in your
         area
-      </Text>
+      </Text> */}
 
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Your Zone</Text>
@@ -27,26 +64,37 @@ const LocationSelectionScreen = () => {
           style={styles.picker}
         >
           <Picker.Item label="Tilisi" value="Tilisi" />
+          <Picker.Item label="Other" value="Other" />
           {/* Add more zones as needed */}
         </Picker>
       </View>
 
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Your Area</Text>
-        <Picker
-          selectedValue={area}
-          onValueChange={(itemValue) => setArea(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Residence" value="" />
-          <Picker.Item label="Maisha Mapya" value="MaishaMapya" />
-          <Picker.Item label="Maisha Makao" value="MaishaMakao" />
-          <Picker.Item label="Tilisi Views" value="TilisiViews" />
-          {/* Add more areas as needed */}
-        </Picker>
+
+        {zone == "Tilisi" ? (
+          <Picker
+            selectedValue={area}
+            onValueChange={(itemValue) => setArea(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select Residence" value="" />
+            <Picker.Item label="Maisha Mapya" value="MaishaMapya" />
+            <Picker.Item label="Maisha Makao" value="MaishaMakao" />
+            <Picker.Item label="Tilisi Views" value="TilisiViews" />
+            {/* Add more areas as needed */}
+          </Picker>
+        ) : (
+          <TextInput
+            style={styles.picker}
+            onChangeText={setArea}
+            value={area}
+            placeholder="Other"
+          />
+        )}
       </View>
 
-      <TouchableOpacity style={styles.submitButton}>
+      <TouchableOpacity style={styles.submitButton} onPress={onPress}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity>
     </View>

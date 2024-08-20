@@ -1,4 +1,5 @@
 import { supabase } from "@/src/lib/supabase";
+import { useAuth } from "@/src/providers/AuthProvider";
 import { router, useSegments } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -16,9 +17,15 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { usernameSetter } = useAuth();
 
   async function signUpWithEmail() {
+    if (!username || !email || !password) {
+      return Alert.alert("", "Please Fill in All Fields");
+    }
+
     setLoading(true);
+    usernameSetter(username);
     const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
@@ -90,6 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#F8F8F8",
+    marginTop: 80,
   },
   header: {
     alignItems: "center",

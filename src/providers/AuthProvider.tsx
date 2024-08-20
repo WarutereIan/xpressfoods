@@ -13,6 +13,8 @@ type AuthData = {
   profile: any;
   loading: boolean;
   isAdmin: boolean;
+  userName: string;
+  usernameSetter: (username: string) => void;
 };
 
 const AuthContext = createContext<AuthData>({
@@ -20,12 +22,15 @@ const AuthContext = createContext<AuthData>({
   loading: true,
   profile: null,
   isAdmin: false,
+  userName: "",
+  usernameSetter: (username: string) => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -54,9 +59,20 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
+  const usernameSetter = (username: string) => {
+    setUserName(username);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ session, loading, profile, isAdmin: profile?.group === "ADMIN" }}
+      value={{
+        session,
+        loading,
+        profile,
+        isAdmin: profile?.group === "ADMIN",
+        userName,
+        usernameSetter,
+      }}
     >
       {children}
     </AuthContext.Provider>

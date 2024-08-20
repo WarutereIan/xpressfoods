@@ -77,6 +77,10 @@ function RootLayoutNav() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
+                      name="(auth)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
                       name="(admin)"
                       options={{ headerShown: false }}
                     />
@@ -86,6 +90,10 @@ function RootLayoutNav() {
                     />
                     <Stack.Screen
                       name="select-location"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(utility-screens)"
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen

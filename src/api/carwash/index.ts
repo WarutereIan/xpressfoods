@@ -25,15 +25,15 @@ export const useMyCarWashOrderList = () => {
 
 export const useInsertCarwashOrder = () => {
   const queryClient = useQueryClient();
-  //const {session} = useAuth()
-  //const userId = session?.user.id
+  const { session } = useAuth();
+  const userId = session?.user.id;
 
   return useMutation({
     async mutationFn(data: any) {
       const { error, data: newProduct } = await supabase
         .from("carwash_orders")
-        .insert(data)
-        //.insert({...data,user_id: userId, })
+        //.insert(data)
+        .insert({ ...data, created_by: userId })
         .select()
         .single();
 

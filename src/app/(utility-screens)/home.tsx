@@ -12,6 +12,8 @@ import {
   ScrollView,
 } from "react-native";
 
+import CarwashSvg from "@/assets/images/services/carwash.svg";
+
 const services = [
   {
     name: "ULTRA DETAILING CAR WASH",
@@ -20,6 +22,7 @@ const services = [
     onPress: () => {
       router.navigate("/(user)/carwash");
     },
+    CarwashSvg,
   },
   {
     name: "Jirani",
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-around",
-    padding: 10,
+    padding: 20,
     marginTop: 20,
   },
   serviceItem: {
@@ -114,15 +117,20 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   serviceImage: {
-    width: "100%",
-    height: "100%",
+    width: "auto",
+    height: "auto",
+    //padding: 50,
+    resizeMode: "contain",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
   serviceOverlay: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(0,0,0,0.2)",
     padding: 10,
   },
   serviceName: {

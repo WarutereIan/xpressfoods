@@ -10,9 +10,9 @@ const AuthLayout = () => {
 
   const colorScheme = useColorScheme();
 
-  if (!session) {
+  /* if (!session) {
     return <Redirect href={"/"} />;
-  }
+  } */
 
   return (
     <Stack>

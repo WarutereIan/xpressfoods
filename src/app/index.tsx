@@ -16,14 +16,14 @@ const index = () => {
   }
 
   if (!session) {
-    return <Redirect href={"/(user)/welcome"} />;
+    return <Redirect href={"/welcome"} />;
   }
 
   /* if (!isAdmin) {
     return <Redirect href={"/(user)/carwash"} />;
   } */
 
-  if (profile?.group === "ADMIN") {
+  if (isAdmin) {
     return (
       <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
         <Link href={"/(user)"} asChild>
@@ -36,7 +36,7 @@ const index = () => {
     );
   }
 
-  return <Redirect href="/(user)" />;
+  return <Redirect href="/(utility-screens)/home" />;
 };
 
 export default index;
