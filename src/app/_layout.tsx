@@ -16,6 +16,7 @@ import QueryProvider from "../providers/QueryProviders";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CarwashProvider from "../providers/CarwashProvider";
 import AuthProvider from "../providers/AuthProvider";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -69,20 +70,30 @@ function RootLayoutNav() {
           <QueryProvider>
             <CarwashProvider>
               <CartProvider>
-                <Stack>
-                  <Stack.Screen
-                    name="(user)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="(admin)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="cart"
-                    options={{ presentation: "modal" }}
-                  />
-                </Stack>
+                <AutocompleteDropdownContextProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen
+                      name="(user)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="(admin)"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="welcome"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="select-location"
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="cart"
+                      options={{ presentation: "modal" }}
+                    />
+                  </Stack>
+                </AutocompleteDropdownContextProvider>
               </CartProvider>
             </CarwashProvider>
           </QueryProvider>

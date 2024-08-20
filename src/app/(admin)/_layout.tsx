@@ -55,6 +55,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       /> */}
+      <Tabs.Screen
+        name="carwashAdmin"
+        options={{
+          title: "Carwash Admin",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }

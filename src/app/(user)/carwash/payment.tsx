@@ -5,14 +5,14 @@ import { Link } from "expo-router";
 import { useCarwash } from "@/src/providers/CarwashProvider";
 
 const PaymentMethodsScreen = () => {
-  const [selectedMethod, setSelectedMethod] = useState("");
+  const [selectedMethod, setSelectedMethod] = useState("CASH");
 
   const { setPaymentMode } = useCarwash();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        {/*  <Ionicons name="arrow-back" size={24} color="black" /> */}
       </TouchableOpacity>
 
       <Text style={styles.header}>Payment Methods</Text>

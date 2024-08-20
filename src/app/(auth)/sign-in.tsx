@@ -1,83 +1,154 @@
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
+import { supabase } from "@/src/lib/supabase";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import Button from "../../components/Button";
-import Colors from "../../constants/Colors";
-import { Link, Stack } from "expo-router";
-import { supabase } from "../../lib/supabase";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+} from "react-native";
 
-const SignInScreen = () => {
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function signInWithEmail() {
+    if (email.length == 0 || password.length == 0) {
+      return Alert.alert("Please provide credentials");
+    }
+
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) {
+      setLoading(false);
+      return Alert.alert(error.message);
+    }
+
     setLoading(false);
+    router.navigate("/(user)");
   }
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Sign in" }} />
+      {/* <Image source={require("./assets/carrot-icon.png")} style={styles.icon} /> */}
+      <Text style={styles.title}>Log in </Text>
+      <Text style={styles.subtitle}>Enter your emails and password</Text>
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="jon@gmail.com"
-        style={styles.input}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Email"
+          keyboardType="email-address"
+        />
+      </View>
 
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder=""
-        style={styles.input}
-        secureTextEntry
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+          secureTextEntry={true}
+        />
+      </View>
 
-      <Button
-        onPress={signInWithEmail}
-        disabled={loading}
-        text={loading ? "Signing in..." : "Sign in"}
-      />
-      <Link href="/sign-up" style={styles.textButton}>
-        Create an account
-      </Link>
+      <TouchableOpacity>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.loginButton} onPress={signInWithEmail}>
+        <Text style={styles.loginButtonText}>
+          {loading ? "Logging In" : "Log In"}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.signupContainer}
+        onPress={() => {
+          router.navigate("/(auth)/sign-up");
+        }}
+      >
+        <Text style={styles.signupText}>Don't have an account? </Text>
+
+        <Text style={styles.signupLink}>Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    justifyContent: "center",
     flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  icon: {
+    width: 50,
+    height: 50,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "900",
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#888",
+    marginBottom: 20,
+  },
+  inputContainer: {
+    marginBottom: 20,
   },
   label: {
-    color: "gray",
+    fontSize: 16,
+    marginBottom: 5,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "gray",
+    borderBottomWidth: 1,
+    borderColor: "#d3d3d3",
     padding: 10,
-    marginTop: 5,
-    marginBottom: 20,
-    backgroundColor: "white",
     borderRadius: 5,
   },
-  textButton: {
-    alignSelf: "center",
+  forgotPassword: {
+    color: "#888",
+    textAlign: "right",
+    marginBottom: 20,
+  },
+  loginButton: {
+    backgroundColor: "#4CAF50",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  loginButtonText: {
+    color: "#fff",
+    fontSize: 18,
     fontWeight: "bold",
-    color: Colors.light.tint,
-    marginVertical: 10,
+  },
+  signupContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  signupText: {
+    color: "#888",
+  },
+  signupLink: {
+    color: "#4CAF50",
+    fontWeight: "bold",
   },
 });
 
-export default SignInScreen;
+export default LoginScreen;

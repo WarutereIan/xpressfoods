@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 40,
   },
   placedBooking: {
     backgroundColor: "#8BC34A",

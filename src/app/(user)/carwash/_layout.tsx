@@ -23,9 +23,12 @@ export default function MenuStack() {
         ),
       }} */
     >
-      {/* <Stack.Screen name="index" options={{ title: "H" }} />
-      <Stack.Screen name="mainprices" options={{ title: "Main Prices" }} />
-      <Stack.Screen name="autocare" options={{ title: "Main Prices" }} /> */}
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="mainprices" options={{ headerShown: false }} />
+      <Stack.Screen name="autocare" options={{ headerShown: false }} />
+      <Stack.Screen name="booking" options={{ headerShown: false }} />
+      <Stack.Screen name="review" options={{ headerShown: false }} />
+      <Stack.Screen name="finalScreen" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -16,12 +16,12 @@ const index = () => {
   }
 
   if (!session) {
-    return <Redirect href={"/(auth)/sign-in"} />;
+    return <Redirect href={"/(user)/welcome"} />;
   }
 
-  if (!isAdmin) {
-    return <Redirect href={"/(user)/carwashAdmin"} />;
-  }
+  /* if (!isAdmin) {
+    return <Redirect href={"/(user)/carwash"} />;
+  } */
 
   if (profile?.group === "ADMIN") {
     return (

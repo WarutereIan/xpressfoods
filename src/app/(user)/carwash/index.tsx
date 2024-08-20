@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 
 const BookingScreen = () => {
   const [selectedClass, setSelectedClass] = useState("");
@@ -28,7 +29,7 @@ const BookingScreen = () => {
       return Alert.alert("Attention", "Please enter all Details");
     }
     setCarMake({ class: selectedClass, model: carBrand });
-    router.push("/(user)/carwash/mainprices");
+    router.navigate("/(user)/carwash/mainprices");
   };
 
   const viewBookings = () => {

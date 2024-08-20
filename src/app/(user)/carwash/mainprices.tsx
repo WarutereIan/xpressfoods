@@ -109,7 +109,7 @@ const ServicesScreen = () => {
       title: services[selectedService - 1].title,
     });
 
-    router.push("/(user)/carwash/booking");
+    router.navigate("/(user)/carwash/booking");
   };
   const confirmDetails = () => {
     if (selectedService != 100)
@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 40,
   },
   backButton: {
     width: 40,

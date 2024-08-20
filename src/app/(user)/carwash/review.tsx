@@ -23,7 +23,7 @@ const ReviewSummaryScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        {/* <Ionicons name="arrow-back" size={24} color="black" /> */}
       </TouchableOpacity>
 
       <Text style={styles.header}>Review Summary</Text>

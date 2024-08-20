@@ -33,7 +33,7 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
-      <Tabs.Screen name="index" options={{ href: null }} />
+      <Tabs.Screen name="index" options={{ href: null, headerShown: false }} />
 
       {/*  <Tabs.Screen
         name="menu"
@@ -57,14 +57,6 @@ export default function TabLayout() {
         name="carwash"
         options={{
           title: "Carwash",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="carwashAdmin"
-        options={{
-          title: "Carwash Admin",
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
         }}

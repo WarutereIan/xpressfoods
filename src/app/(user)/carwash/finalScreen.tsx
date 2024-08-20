@@ -15,7 +15,7 @@ const CarWashingServiceBookedScreen = () => {
       <TouchableOpacity
         style={styles.receiptButton}
         onPress={() => {
-          router.push("/(user)/carwash/mybookings");
+          router.navigate("/(user)/carwash/mybookings");
         }}
       >
         <Text style={styles.receiptButtonText}>View My Bookings</Text>
@@ -23,7 +23,7 @@ const CarWashingServiceBookedScreen = () => {
       <TouchableOpacity
         style={styles.bookingsButton}
         onPress={() => {
-          router.push("/(user)/carwash");
+          router.navigate("/(user)/carwash");
         }}
       >
         <Text style={styles.bookingsButtonText}>Home</Text>
