@@ -14,6 +14,7 @@ import {
 
 const DashboardScreen = () => {
   const { data } = useGetCarWashBookings();
+  const segments = useSegments();
 
   const bookingsArr: [] = [];
 
@@ -43,7 +44,7 @@ const DashboardScreen = () => {
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          router.navigate(`/(user)/carwashAdmin`);
+          router.navigate(`/${segments[0]}/carwashAdmin`);
         }}
         style={styles.logoContainer}
       >
@@ -89,7 +90,7 @@ const DashboardScreen = () => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          router.push("/(user)/carwashAdmin/bookingHistory");
+          router.push(`/${segments[0]}/carwashAdmin/bookingHistory`);
         }}
       >
         <Text style={styles.buttonText}>Booking History</Text>
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f0f0f0",
     padding: 20,
+    marginTop: 40,
   },
   logoContainer: {
     alignItems: "center",
@@ -277,11 +279,11 @@ const styles2 = StyleSheet.create({
     padding: 5,
   },
   carText: {
-    fontSize: 20,
+    fontSize: 10,
     fontWeight: "bold",
   },
   timeText: {
-    fontSize: 13,
+    fontSize: 10,
   },
   NEW: {
     color: "#fff",

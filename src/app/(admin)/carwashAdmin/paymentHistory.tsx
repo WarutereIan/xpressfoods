@@ -55,13 +55,21 @@ const PaymentHistoryScreen = () => {
   });
 
   const [displayedList, setDisplayedList] = useState<any[]>(mpesaOrders);
+  const segments = useSegments();
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.logo}>
-          <Image source={require("@/assets/images/carwashlogo.png")} />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            router.navigate(`${segments[0]}/carwashAdmin`);
+          }}
+        >
+          <View style={styles.logo}>
+            <Image source={require("@/assets/images/carwashlogo.png")} />
+          </View>
+        </TouchableOpacity>
+
         <Text style={styles.title}>Payment History</Text>
       </View>
       <View style={styles.paymentMethods}>
@@ -124,6 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f0f0",
+    marginTop: 40,
   },
   header: {
     alignItems: "center",

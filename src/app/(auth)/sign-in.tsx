@@ -33,7 +33,7 @@ const LoginScreen = () => {
     }
 
     setLoading(false);
-    router.navigate("/(user)");
+    router.navigate("/");
   }
 
   return (
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
+    marginTop: 80,
   },
   icon: {
     width: 50,

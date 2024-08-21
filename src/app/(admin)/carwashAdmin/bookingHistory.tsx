@@ -56,7 +56,7 @@ const BookingHistory = () => {
     <ScrollView style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          router.navigate(`/(user)/carwashAdmin`);
+          router.navigate(`/${segments[0]}/carwashAdmin`);
         }}
         style={styles.logoContainer}
       >
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f0f0",
+    marginTop: 40,
   },
   header: {
     alignItems: "center",

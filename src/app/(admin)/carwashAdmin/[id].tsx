@@ -67,7 +67,7 @@ const ActiveBookingsScreen = () => {
       <ScrollView style={styles.scrollView}>
         <TouchableOpacity
           onPress={() => {
-            router.navigate(`/(user)/carwashAdmin`);
+            router.navigate(`/${segments[0]}/carwashAdmin`);
           }}
           style={styles.logoContainer}
         >
@@ -77,7 +77,7 @@ const ActiveBookingsScreen = () => {
           />
         </TouchableOpacity>
 
-        <Text style={styles.title}>Active Bookings</Text>
+        <Text style={styles.title}>Order Status</Text>
 
         <View style={styles.bookingCard}>
           <Text style={styles.date}>{order.date}</Text>
@@ -182,7 +182,7 @@ const ActiveBookingsScreen = () => {
         <TouchableOpacity
           style={styles.historyButton}
           onPress={() => {
-            router.push("/(user)/carwashAdmin/bookingHistory");
+            router.push(`/${segments[0]}/carwashAdmin/bookingHistory`);
           }}
         >
           <Text style={styles.historyButtonText}>Booking History</Text>
@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f0f0",
+    marginTop: 40,
   },
   scrollView: {
     flex: 1,

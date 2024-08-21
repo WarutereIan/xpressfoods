@@ -10,14 +10,15 @@ const AuthLayout = () => {
 
   const colorScheme = useColorScheme();
 
-  /* if (!session) {
+  if (session) {
     return <Redirect href={"/"} />;
-  } */
+  }
 
   return (
     <Stack>
       <Stack.Screen name="sign-in" options={{ headerShown: false }} />
       <Stack.Screen name="sign-up" options={{ headerShown: false }} />
+      <Stack.Screen name="admin-location" options={{ headerShown: false }} />
       <Stack.Screen name="select-location" options={{ headerShown: false }} />
     </Stack>
   );

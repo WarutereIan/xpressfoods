@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import CarwashSvg from "@/assets/images/services/carwash.svg";
+import { useAuth } from "@/src/providers/AuthProvider";
 
 const services = [
   {
@@ -42,6 +43,9 @@ const services = [
 ];
 
 const HomeScreen = () => {
+  const { isAdmin } = useAuth();
+  console.log(isAdmin);
+
   return (
     <ImageBackground
       source={require("@/assets/images/services/services-bg.png")}
@@ -97,9 +101,10 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 28,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "white",
     lineHeight: 40,
+    fontFamily: "GilroyBold",
   },
   servicesContainer: {
     flex: 1,
