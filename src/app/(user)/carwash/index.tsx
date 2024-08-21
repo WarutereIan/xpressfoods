@@ -12,11 +12,19 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
+
+import DropdownInput, { Dropdown } from "react-native-element-dropdown";
+
+import { Cars } from "@/assets/data/cars";
 
 const BookingScreen = () => {
   const [selectedClass, setSelectedClass] = useState("");
   const [carBrand, setCarBrand] = useState("");
+
+  const [value, setValue] = useState<any>(null);
+  const [searchText, setSearchText] = useState<any>(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [data, setData] = useState<any>(Cars);
 
   const router = useRouter();
 
@@ -24,7 +32,29 @@ const BookingScreen = () => {
 
   const { session } = useAuth();
 
+  const handleSearch = (text: string) => {
+    // Filter items based on search text
+    const filteredItems = data.filter((item) =>
+      item["Identification.Model Year"]
+        .toLowerCase()
+        .includes(text.toLowerCase())
+    );
+
+    // If no matches found, add the search text as a new item
+    let newItem: any[] = [];
+    if (filteredItems.length === 0) {
+      newItem.push({
+        "Identification.Model Year": text,
+        "Identification.ID": text,
+      });
+    }
+
+    setData([...data, ...newItem]);
+  };
+
   const confirmDetails = () => {
+    setCarBrand(value);
+
     if (selectedClass.length == 0 || carBrand.length == 0) {
       return Alert.alert("Attention", "Please enter all Details");
     }
@@ -54,10 +84,8 @@ const BookingScreen = () => {
         <View style={styles.ultraDetailingBadge}>
           <Image source={require("@/assets/images/carwashlogo.png")} />
         </View>
-
         <Text style={styles.bookingTitle}>Effortless</Text>
         <Text style={styles.bookingSubtitle}>Booking</Text>
-
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={selectedClass}
@@ -69,12 +97,62 @@ const BookingScreen = () => {
             <Picker.Item label="SUV" value="SUV" />
           </Picker>
         </View>
-
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           onChangeText={(text) => setCarBrand(text)}
           placeholder="Car Brand"
+        /> */}
+        {/*  <AutocompleteDropdown
+          clearOnFocus={true}
+          closeOnBlur={true}
+          closeOnSubmit={true}
+          initialValue={{ id: "2" }} // or just '2'
+          onSelectItem={handleSelectItem}
+          debounce={5000}
+          onChangeText={(text) => setInputValue(text)}
+          dataSet={[
+            { id: "1", title: "Alpha" },
+            { id: "2", title: "Beta" },
+            { id: "3", title: "Gamma" },
+          ]}
+          textInputProps={{
+            placeholder: "Type to search...",
+            autoCorrect: false,
+            value: inputValue,
+            onSubmitEditing(e) {
+              const text = e.nativeEvent.text;
+              if (text && !items.some((item) => item.title === text)) {
+                // Create a new item from the input value
+                const newItem = { id: `custom-${text}`, title: text };
+                setSelectedItem(newItem);
+                console.log(selectedItem);
+              }
+            },
+          }}
+        /> */}
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={data}
+          search
+          maxHeight={300}
+          labelField="Identification.ID"
+          valueField="Identification.Model Year"
+          placeholder={!isFocus ? "Select Car Model" : "..."}
+          searchPlaceholder="Search or type to add..."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={(item) => {
+            setValue(item["Identification.Model Year"]);
+            setIsFocus(false);
+          }}
+          onChangeText={(text) => handleSearch(text)}
         />
+        {/* {value && <Text style={styles.selectedItem}>Selected: {value}</Text>} */}
 
         <TouchableOpacity style={styles.bookButton} onPress={confirmDetails}>
           <Text style={styles.bookButtonText}>Continue</Text>
@@ -179,6 +257,36 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
+  },
+  dropdown: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    marginBottom: 10,
+  },
+  placeholderStyle: {
+    color: "#aaa",
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    color: "#333",
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    paddingHorizontal: 0,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+    tintColor: "#333",
   },
 });
 

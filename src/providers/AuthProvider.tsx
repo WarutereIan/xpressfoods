@@ -15,6 +15,7 @@ type AuthData = {
   isAdmin: boolean;
   userName: string;
   usernameSetter: (username: string) => void;
+  refreshSession: () => void;
 };
 
 const AuthContext = createContext<AuthData>({
@@ -24,6 +25,7 @@ const AuthContext = createContext<AuthData>({
   isAdmin: false,
   userName: "",
   usernameSetter: (username: string) => {},
+  refreshSession: () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -31,28 +33,30 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  const fetchSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    setSession(session);
+
+    if (session) {
+      // fetch profile
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .single();
+      setProfile(data || null);
+
+      data.group == "ADMIN" ? setIsAdmin(true) : setIsAdmin(false);
+    }
+
+    setLoading(false);
+  };
   useEffect(() => {
-    const fetchSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      setSession(session);
-
-      if (session) {
-        // fetch profile
-        const { data } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
-        setProfile(data || null);
-      }
-
-      setLoading(false);
-    };
-
     fetchSession();
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -61,6 +65,13 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
   const usernameSetter = (username: string) => {
     setUserName(username);
+  };
+
+  const refreshSession = async () => {
+    await fetchSession();
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
   };
 
   return (
@@ -72,6 +83,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         isAdmin: profile?.group === "ADMIN",
         userName,
         usernameSetter,
+        refreshSession,
       }}
     >
       {children}

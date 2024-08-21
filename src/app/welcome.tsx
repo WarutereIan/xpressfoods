@@ -5,10 +5,13 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 const WelcomeScreen = () => {
   return (
     <View style={styles.container}>
-      <Image
-        source={require("@/assets/images/jiraniBg.png")}
-        style={styles.backgroundImage}
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("@/assets/images/njoro.jpg")}
+          style={styles.backgroundImage}
+        />
+      </View>
+
       <View style={styles.contentContainer}>
         {/* <Image
           source={require("./path-to-your-carrot-icon.png")}
@@ -36,10 +39,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  imageContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    zIndex: -1,
+  },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
     width: "100%",
     height: "100%",
+    backgroundColor: "",
   },
   contentContainer: {
     flex: 1,

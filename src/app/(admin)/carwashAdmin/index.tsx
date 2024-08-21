@@ -22,21 +22,21 @@ const HomeScreen = () => {
       <View style={styles.menuContainer}>
         <TouchableOpacity
           onPress={() => {
-            router.push("/(user)/carwashAdmin/dashboard");
+            router.push(`/${segments[0]}/carwashAdmin/dashboard`);
           }}
         >
           <Text style={styles.menuItem}>Dashboard</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            router.push("/(user)/carwashAdmin/bookingHistory");
+            router.push(`/${segments[0]}/carwashAdmin/bookingHistory`);
           }}
         >
           <Text style={styles.menuItem}>Booking History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            router.push("/(user)/carwashAdmin/paymentHistory");
+            router.push(`/${segments[0]}/carwashAdmin/paymentHistory`);
           }}
         >
           <Text style={styles.menuItem}>Payment History</Text>
@@ -46,7 +46,7 @@ const HomeScreen = () => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          router.push("/(user)/carwashAdmin/dashboard");
+          router.push(`/${segments[0]}/carwashAdmin/dashboard`);
         }}
       >
         <Text style={styles.buttonText}>Let's Get Started</Text>
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 20,
+    marginTop: 40,
   },
   logoContainer: {
     alignItems: "center",
