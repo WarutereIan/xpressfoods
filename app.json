@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Jirani",
-    "slug": "Jirani",
+    "name": "Jirani_admin",
+    "slug": "Jirani_admin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
