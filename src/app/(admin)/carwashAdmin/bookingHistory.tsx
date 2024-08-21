@@ -56,7 +56,7 @@ const BookingHistory = () => {
     <ScrollView style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          router.navigate(`/(user)/carwashAdmin`);
+          router.navigate(`/${segments[0]}/carwashAdmin`);
         }}
         style={styles.logoContainer}
       >
