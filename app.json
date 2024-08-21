@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Jirani_admin",
-    "slug": "Jirani_admin",
+    "slug": "jiraniadmin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
@@ -49,7 +49,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e4ca60fa-25c3-4f3d-a04c-700de1ef5e41"
+        "projectId": "eb848d4f-0a5f-4067-8c08-56230c870220"
       }
     }
   }
