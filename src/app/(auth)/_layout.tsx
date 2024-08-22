@@ -6,11 +6,13 @@ import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
 import { useColorScheme } from "react-native";
 
 const AuthLayout = () => {
-  const { session } = useAuth();
+  const { session, profile } = useAuth();
 
   const colorScheme = useColorScheme();
 
-  if (session) {
+  console.log(profile);
+
+  if (profile != null) {
     return <Redirect href={"/"} />;
   }
 

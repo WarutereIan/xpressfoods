@@ -44,7 +44,7 @@ const services = [
 
 const HomeScreen = () => {
   const { isAdmin } = useAuth();
-  console.log(isAdmin);
+  //console.log(isAdmin);
 
   return (
     <ImageBackground

@@ -22,7 +22,7 @@ const index = () => {
   /* if (!isAdmin) {
     return <Redirect href={"/(user)/carwash"} />;
   } */
-  //console.log(profile);
+  console.log(profile);
 
   if (isAdmin) {
     return (

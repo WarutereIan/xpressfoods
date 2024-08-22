@@ -17,6 +17,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CarwashProvider from "../providers/CarwashProvider";
 import AuthProvider from "../providers/AuthProvider";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import NotificationProvider from "../providers/NotificationProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -68,42 +69,44 @@ function RootLayoutNav() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <AuthProvider>
           <QueryProvider>
-            <CarwashProvider>
-              <CartProvider>
-                <AutocompleteDropdownContextProvider>
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen
-                      name="(user)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="(auth)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="(admin)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="welcome"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="select-location"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="(utility-screens)"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="cart"
-                      options={{ presentation: "modal" }}
-                    />
-                  </Stack>
-                </AutocompleteDropdownContextProvider>
-              </CartProvider>
-            </CarwashProvider>
+            <NotificationProvider>
+              <CarwashProvider>
+                <CartProvider>
+                  <AutocompleteDropdownContextProvider>
+                    <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen
+                        name="(user)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="(auth)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="(admin)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="welcome"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="select-location"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="(utility-screens)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="cart"
+                        options={{ presentation: "modal" }}
+                      />
+                    </Stack>
+                  </AutocompleteDropdownContextProvider>
+                </CartProvider>
+              </CarwashProvider>
+            </NotificationProvider>
           </QueryProvider>
         </AuthProvider>
       </GestureHandlerRootView>

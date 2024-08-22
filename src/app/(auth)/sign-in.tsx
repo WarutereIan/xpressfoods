@@ -1,4 +1,5 @@
 import { supabase } from "@/src/lib/supabase";
+import { useAuth } from "@/src/providers/AuthProvider";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -16,13 +17,15 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { refreshSession, profileSetter } = useAuth();
+
   async function signInWithEmail() {
     if (email.length == 0 || password.length == 0) {
       return Alert.alert("Please provide credentials");
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -32,6 +35,13 @@ const LoginScreen = () => {
       return Alert.alert(error.message);
     }
 
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", data.session.user.id)
+      .single();
+
+    profileSetter(profile);
     setLoading(false);
     router.navigate("/");
   }

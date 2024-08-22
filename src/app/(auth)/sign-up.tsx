@@ -33,11 +33,11 @@ const SignUpScreen = () => {
       return Alert.alert(error.message);
     }
 
-    //router.navigate("/(auth)/select-location");
+    router.navigate("/(auth)/select-location");
     //for admin signup
-    router.navigate("/(auth)/admin-location");
+    //router.navigate("/(auth)/admin-location");
   }
-  
+
   return (
     <View style={styles.container}>
       {/*  <Image source={require("./assets/carrot-icon.png")} style={styles.icon} /> */}

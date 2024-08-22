@@ -15,6 +15,7 @@ type AuthData = {
   isAdmin: boolean;
   userName: string;
   usernameSetter: (username: string) => void;
+  profileSetter: (profile: string) => void;
   refreshSession: () => void;
 };
 
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthData>({
   isAdmin: false,
   userName: "",
   usernameSetter: (username: string) => {},
+  profileSetter: (profile: string) => {},
   refreshSession: () => {},
 });
 
@@ -67,6 +69,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     setUserName(username);
   };
 
+  const profileSetter = (profile: any) => {
+    setProfile(profile);
+  };
+
   const refreshSession = async () => {
     await fetchSession();
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -84,6 +90,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         userName,
         usernameSetter,
         refreshSession,
+        profileSetter,
       }}
     >
       {children}
