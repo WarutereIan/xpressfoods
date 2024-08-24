@@ -1,3 +1,4 @@
+import { registerForPushNotificationsAsync } from "@/src/lib/notifications";
 import { supabase } from "@/src/lib/supabase";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { router } from "expo-router";
@@ -28,6 +29,16 @@ const LoginScreen = () => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+    });
+
+    //get and set user profile notification token
+    registerForPushNotificationsAsync().then(async (token) => {
+      //save token in user's profile in db
+      //update token in db
+      await supabase
+        .from("profiles")
+        .update({ expo_push_token: token })
+        .eq("user_id", data.session?.user.id);
     });
 
     if (error) {

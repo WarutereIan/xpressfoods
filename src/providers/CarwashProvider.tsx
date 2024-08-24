@@ -13,6 +13,8 @@ import { useInsertOrderItems } from "../api/order-items";
 import { useInsertCarwashOrder } from "../api/carwash";
 import { useAuth } from "./AuthProvider";
 import { Alert } from "react-native";
+import { supabase } from "../lib/supabase";
+import { sendPushNotification } from "../lib/notifications";
 
 type CartType = {
   items: CartItem[];
@@ -208,6 +210,38 @@ const CarwashProvider = ({ children }: PropsWithChildren) => {
       },
       {
         onSuccess() {
+          //notify admin of new order
+          //get admin's expo push notification id
+          let adminProfiles: any[] | null = [];
+
+          async function getAdminNotificationId() {
+            const { data, error } = await supabase
+              .from("profiles")
+              .select("*")
+              .eq("admin_app", "carwash");
+            //.single();
+
+            adminProfiles = data;
+          }
+          getAdminNotificationId().then(() => {
+            if (adminProfiles) {
+              adminProfiles.forEach((profile) => {
+                profile.expo_push_token
+                  ? sendPushNotification(
+                      profile.expo_push_token,
+                      "You Have a New Booking!",
+                      `${carModel.model}:${
+                        services.length > 0
+                          ? services[0].title
+                          : autoServices[0].title
+                      }`
+                    )
+                  : null;
+              });
+            }
+          });
+          console.log(services[0]);
+
           clearCarWashCart();
           router.push("/(user)/carwash/finalScreen");
         },

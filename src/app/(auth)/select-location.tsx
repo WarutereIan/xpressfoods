@@ -12,6 +12,8 @@ import { Picker } from "@react-native-picker/picker";
 import { useInsertUserProfile } from "@/src/api/user";
 import { useAuth } from "@/src/providers/AuthProvider";
 import { router } from "expo-router";
+import { registerForPushNotificationsAsync } from "@/src/lib/notifications";
+import { supabase } from "@/src/lib/supabase";
 
 const LocationSelectionScreen = () => {
   const [zone, setZone] = useState("Tilisi");
@@ -34,6 +36,16 @@ const LocationSelectionScreen = () => {
       },
       {
         onSuccess() {
+          //get and set user profile notification token
+          registerForPushNotificationsAsync().then(async (token) => {
+            //save token in user's profile in db
+            //update token in db
+            await supabase
+              .from("profiles")
+              .update({ expo_push_token: token })
+              .eq("user_id", session?.user.id);
+          });
+
           router.navigate("/(utility-screens)/home");
         },
         onError(error) {

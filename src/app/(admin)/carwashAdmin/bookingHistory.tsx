@@ -20,7 +20,7 @@ const BookingHistory = () => {
   const bookingsArr: any[] = [];
 
   data?.forEach((order) => {
-    let date = new Date(order.created_at);
+    let date = new Date(order.pick_up_time);
 
     if (order.services_requested[0]) {
       let bookingObj = {

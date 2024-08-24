@@ -25,7 +25,7 @@ const DashboardScreen = () => {
     totalRevenue += order.total_amount;
     order.status == "NEW" ? activeBookings++ : null;
 
-    let date = new Date(order.created_at);
+    let date = new Date(order.pick_up_time);
 
     if (order.services_requested[0]) {
       let bookingObj = {
@@ -227,7 +227,11 @@ const BookingsCard = ({ bookingsArr }) => {
                   <View key={status} style={styles2.cell}>
                     {booking && (
                       <>
-                        <Text style={[styles2.carText, styles2[status]]}>
+                        <Text
+                          style={[styles2.carText, styles2[status]]}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
                           {booking.car}
                         </Text>
                         <Text style={[styles2.timeText, styles2[status]]}>
@@ -277,10 +281,13 @@ const styles2 = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 5,
+    overflow: "hidden",
+    maxWidth: 90,
   },
   carText: {
     fontSize: 10,
     fontWeight: "bold",
+    width: "100%",
   },
   timeText: {
     fontSize: 10,

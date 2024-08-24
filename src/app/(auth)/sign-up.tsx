@@ -16,12 +16,17 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, confirmSetPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { usernameSetter } = useAuth();
 
   async function signUpWithEmail() {
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !confirmPassword) {
       return Alert.alert("", "Please Fill in All Fields");
+    }
+
+    if (confirmPassword != password) {
+      return Alert.alert("", "Passwords Do Not Match");
     }
 
     setLoading(true);
@@ -65,6 +70,18 @@ const SignUpScreen = () => {
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
+        secureTextEntry={true}
+      />
+
+      <TextInput
+        style={
+          styles.input && confirmPassword !== password
+            ? { borderColor: "red" }
+            : { borderColor: "black" }
+        }
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={confirmSetPassword}
         secureTextEntry={true}
       />
 

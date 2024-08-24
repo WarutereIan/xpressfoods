@@ -2,6 +2,7 @@ import {
   useCarWashOrderDetails,
   useUpdateCarWashOrder,
 } from "@/src/api/carwash";
+import { notifyUserAboutOrderUpdate } from "@/src/lib/notifications";
 import { router, useLocalSearchParams, useSegments } from "expo-router";
 import moment from "moment";
 import React, { useState } from "react";
@@ -29,9 +30,17 @@ const ActiveBookingsScreen = () => {
 
   const { data, isLoading, error } = useCarWashOrderDetails(id);
 
-  const onStatusPress = (status: string) => {
+  const onStatusPress = async (status: string) => {
     updateOrder({ id, status: status });
     setSelectedButton(status);
+
+    console.log("Notify user", data.created_by);
+    if (data)
+      await notifyUserAboutOrderUpdate(
+        `Order for ${data.services_requested[0].title} Updated`,
+        `Order ${status}`,
+        data.created_by
+      );
   };
 
   if (isLoading) {
@@ -56,8 +65,8 @@ const ActiveBookingsScreen = () => {
 
   const order = {
     car: data.services_requested[0].carModel.toUpperCase(),
-    time: moment(data.created_at).format("HH:mm"),
-    date: moment(data.created_at).format("YYYY-MM-DD"),
+    time: moment(data.pick_up_time).format("HH:mm"),
+    date: moment(data.pick_up_time).format("YYYY-MM-DD"),
     status: data.status,
     pickUpMethod: data.pick_up_method,
   };

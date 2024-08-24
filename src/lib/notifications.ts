@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
+import { supabase } from "./supabase";
 
 function handleRegistrationError(errorMessage: string) {
   alert(errorMessage);
@@ -54,12 +55,17 @@ export async function registerForPushNotificationsAsync() {
   }
 }
 
-export async function sendPushNotification(expoPushToken: string) {
+//should take service details
+export async function sendPushNotification(
+  expoPushToken: string,
+  title: string,
+  body: string
+) {
   const message = {
     to: expoPushToken,
     sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
+    title: title,
+    body: body,
     data: { someData: "goes here" },
   };
 
@@ -73,3 +79,28 @@ export async function sendPushNotification(expoPushToken: string) {
     body: JSON.stringify(message),
   });
 }
+
+const getUserExpoNotificationToken = async (userId) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  return data?.expo_push_token;
+};
+
+export const notifyUserAboutOrderUpdate = async (
+  title,
+  body,
+  notification_recipient
+) => {
+  const token = await getUserExpoNotificationToken(notification_recipient);
+  console.log("token", token);
+
+  if (token) {
+    //const title = title;
+    //const body = "Jirani";
+    sendPushNotification(token, title, body);
+  }
+};
