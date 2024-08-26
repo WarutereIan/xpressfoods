@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.wateki.jirani"
+      "package": "com.wateki.jirani",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
