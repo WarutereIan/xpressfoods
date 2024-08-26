@@ -22,7 +22,7 @@ const BookingScreen = () => {
   const [carBrand, setCarBrand] = useState("");
 
   const [value, setValue] = useState<any>(null);
-  const [searchText, setSearchText] = useState<any>(null);
+
   const [isFocus, setIsFocus] = useState(false);
   const [data, setData] = useState<any>(Cars);
 
@@ -97,41 +97,9 @@ const BookingScreen = () => {
             <Picker.Item label="SUV" value="SUV" />
           </Picker>
         </View>
-        {/* <TextInput
-          style={styles.input}
-          onChangeText={(text) => setCarBrand(text)}
-          placeholder="Car Brand"
-        /> */}
-        {/*  <AutocompleteDropdown
-          clearOnFocus={true}
-          closeOnBlur={true}
-          closeOnSubmit={true}
-          initialValue={{ id: "2" }} // or just '2'
-          onSelectItem={handleSelectItem}
-          debounce={5000}
-          onChangeText={(text) => setInputValue(text)}
-          dataSet={[
-            { id: "1", title: "Alpha" },
-            { id: "2", title: "Beta" },
-            { id: "3", title: "Gamma" },
-          ]}
-          textInputProps={{
-            placeholder: "Type to search...",
-            autoCorrect: false,
-            value: inputValue,
-            onSubmitEditing(e) {
-              const text = e.nativeEvent.text;
-              if (text && !items.some((item) => item.title === text)) {
-                // Create a new item from the input value
-                const newItem = { id: `custom-${text}`, title: text };
-                setSelectedItem(newItem);
-                console.log(selectedItem);
-              }
-            },
-          }}
-        /> */}
+
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+          style={[styles.dropdown, isFocus && { borderColor: "8bc34a" }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -148,7 +116,8 @@ const BookingScreen = () => {
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
             setValue(item["Identification.Model Year"]);
-            setIsFocus(false);
+            setCarBrand(value);
+            //setIsFocus(false);
           }}
           onChangeText={(text) => handleSearch(text)}
         />
