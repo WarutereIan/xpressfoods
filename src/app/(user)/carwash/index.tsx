@@ -2,7 +2,7 @@ import { useAuth } from "@/src/providers/AuthProvider";
 import { useCarwash } from "@/src/providers/CarwashProvider";
 import { Picker } from "@react-native-picker/picker";
 import { Link, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -32,6 +32,10 @@ const BookingScreen = () => {
 
   const { session } = useAuth();
 
+  useEffect(() => {
+    setCarBrand(value);
+  }, [value]);
+
   const handleSearch = (text: string) => {
     // Filter items based on search text
     const filteredItems = data.filter((item) =>
@@ -53,7 +57,7 @@ const BookingScreen = () => {
   };
 
   const confirmDetails = () => {
-    setCarBrand(value);
+    //setCarBrand(value);
 
     if (selectedClass.length == 0 || carBrand.length == 0) {
       return Alert.alert("Attention", "Please enter all Details");
@@ -116,8 +120,8 @@ const BookingScreen = () => {
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
             setValue(item["Identification.Model Year"]);
-            setCarBrand(value);
-            //setIsFocus(false);
+
+            setIsFocus(false);
           }}
           onChangeText={(text) => handleSearch(text)}
         />
