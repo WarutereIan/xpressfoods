@@ -76,6 +76,13 @@ const AutoCareServicesScreen = () => {
       id: 6,
     },
     {
+      name: "Hand Polish",
+      price: "KSH 800",
+      service: "machine_polish",
+      service_price: 800,
+      id: 11,
+    },
+    {
       name: "Buffing",
       price: "KSH 4,000",
       service: "buffing",
@@ -84,7 +91,7 @@ const AutoCareServicesScreen = () => {
     },
     {
       name: "Aircon Check & Refill",
-      price: "KSH 2000",
+      price: "KSH 4,000",
       service: "aircon_check_refill",
       service_price: 4000,
       id: 8,
@@ -114,7 +121,7 @@ const AutoCareServicesScreen = () => {
     },
     {
       name: "Vacuuming & Shampooing",
-      price: "KSH 1,500",
+      price: "KSH 2,500",
       service: "vacuuming_and_shampooing",
       service_price: 2500,
       id: 2,
@@ -129,7 +136,6 @@ const AutoCareServicesScreen = () => {
     {
       name: "Leather Care",
       price: "KSH 700",
-
       service: "leather_care",
       service_price: 700,
       id: 4,
@@ -143,10 +149,17 @@ const AutoCareServicesScreen = () => {
     },
     {
       name: "Machine Polish",
-      price: "KSH 3,500",
+      price: "KSH 3,000",
       service: "machine_polish",
       service_price: 3000,
       id: 6,
+    },
+    {
+      name: "Hand Polish",
+      price: "KSH 1,000",
+      service: "machine_polish",
+      service_price: 1000,
+      id: 11,
     },
     {
       name: "Buffing",
