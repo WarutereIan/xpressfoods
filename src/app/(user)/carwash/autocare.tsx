@@ -78,37 +78,37 @@ const AutoCareServicesScreen = () => {
     {
       name: "Hand Polish",
       price: "KSH 800",
-      service: "machine_polish",
+      service: "hand_polish",
       service_price: 800,
-      id: 11,
+      id: 7,
     },
     {
       name: "Buffing",
       price: "KSH 4,000",
       service: "buffing",
       service_price: 4000,
-      id: 7,
+      id: 8,
     },
     {
       name: "Aircon Check & Refill",
       price: "KSH 4,000",
       service: "aircon_check_refill",
       service_price: 4000,
-      id: 8,
+      id: 9,
     },
     {
       name: "Carpet Cleaning",
       price: "KSH 1000",
       service: "carpet_cleaning",
       service_price: 1000,
-      id: 9,
+      id: 10,
     },
     {
       name: "Home & Office Cleaning",
       price: "KSH 1500",
       service: "home_and_office_cleaning",
       service_price: 1500,
-      id: 10,
+      id: 11,
     },
   ];
   const servicesSUV = [
@@ -157,37 +157,37 @@ const AutoCareServicesScreen = () => {
     {
       name: "Hand Polish",
       price: "KSH 1,000",
-      service: "machine_polish",
+      service: "hand_polish",
       service_price: 1000,
-      id: 11,
+      id: 7,
     },
     {
       name: "Buffing",
       price: "KSH 5,000",
       service: "buffing",
       service_price: 5000,
-      id: 7,
+      id: 8,
     },
     {
       name: "Aircon Check & Refill",
       price: "KSH 4000",
       service: "aircon_check_refill",
       service_price: 4000,
-      id: 8,
+      id: 9,
     },
     {
       name: "Carpet Cleaning",
       price: "KSH 1000",
       service: "carpet_cleaning",
       service_price: 1000,
-      id: 9,
+      id: 10,
     },
     {
       name: "Home & Office Cleaning",
       price: "KSH 1500",
       service: "home_and_office_cleaning",
       service_price: 1500,
-      id: 10,
+      id: 11,
     },
   ];
 
@@ -265,10 +265,13 @@ const AutoCareServicesScreen = () => {
             onPress={() => {
               if (highlightedServices.includes(service.service)) {
                 //get index of th object in the array
+                console.log(service.service, "removed");
 
                 setIsUpdating(true);
                 removeServiceFromList(service.service);
               } else {
+                console.log(service.service, "added");
+
                 setHighlightedServices([
                   ...highlightedServices,
                   service.service,
