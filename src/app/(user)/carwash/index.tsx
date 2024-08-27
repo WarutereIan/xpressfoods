@@ -80,14 +80,11 @@ const BookingScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("@/assets/images/offer.png")}
+        source={require("@/assets/images/banner.png")}
         style={styles.jeepImage}
       />
 
       <View style={styles.bookingForm}>
-        <View style={styles.ultraDetailingBadge}>
-          <Image source={require("@/assets/images/carwashlogo.png")} />
-        </View>
         <Text style={styles.bookingTitle}>Effortless</Text>
         <Text style={styles.bookingSubtitle}>Booking</Text>
         <View style={styles.pickerContainer}>
@@ -166,10 +163,12 @@ const styles = StyleSheet.create({
   },
   jeepImage: {
     width: "100%",
-    height: 150,
+    height: 250,
+    padding: 10,
+    //aspectRatio: 1.7,
     resizeMode: "stretch",
     borderRadius: 15,
-    marginBottom: 10,
+    marginBottom: 40,
   },
   bookingForm: {
     backgroundColor: "white",

@@ -27,7 +27,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { backgroundColor: Colors.light.tint },
+        tabBarStyle: { backgroundColor: "black" },
         tabBarInactiveTintColor: "gainsboro",
         tabBarActiveTintColor: Colors.light.background,
         // Disable the static render of the header on web
