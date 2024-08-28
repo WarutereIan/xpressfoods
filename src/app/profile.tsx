@@ -28,23 +28,15 @@ const EditProfileScreen = () => {
   const { session, clearSession, clearProfile, profile } = useAuth();
 
   // let profile: any;
+  console.log(profile);
 
   useEffect(() => {
-    supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", session?.user.id)
-      .single()
-      .then((data) => {
-        //profile = data.data;
-
-        setName(profile?.name);
-        setPhoneNumber(profile.phone_number);
-        setZone(profile.location);
-        setArea(profile.area);
-        setProfileId(profile?.id);
-        setUserId(session?.user.id);
-      });
+    setName(profile?.name);
+    setPhoneNumber(profile.phone_number);
+    setZone(profile.location);
+    setArea(profile.area);
+    setProfileId(profile?.id);
+    setUserId(session?.user.id);
   }, []);
 
   const { mutate: updateProfile } = useUpdateProfile();

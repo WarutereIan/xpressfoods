@@ -12,11 +12,7 @@ const AuthLayout = () => {
 
   console.log(profile);
 
-  if (profile != null) {
-    return <Redirect href={"/"} />;
-  }
-
-  if (session != null) {
+  if (profile != null && session != null) {
     return <Redirect href={"/"} />;
   }
 

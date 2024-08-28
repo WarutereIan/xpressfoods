@@ -34,7 +34,6 @@ const LocationSelectionScreen = () => {
         area: area,
         user_id: session?.user.id,
         phone_number: phoneNumber,
-        
       },
       {
         onSuccess() {
