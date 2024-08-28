@@ -19,7 +19,7 @@ const LocationSelectionScreen = () => {
   const [zone, setZone] = useState("Tilisi");
   const [area, setArea] = useState("");
 
-  const { userName, session } = useAuth();
+  const { userName, session, phoneNumber } = useAuth();
   const { mutate: insertProfile } = useInsertUserProfile();
 
   const onPress = () => {
@@ -33,6 +33,8 @@ const LocationSelectionScreen = () => {
         location: zone,
         area: area,
         user_id: session?.user.id,
+        phone_number: phoneNumber,
+        
       },
       {
         onSuccess() {

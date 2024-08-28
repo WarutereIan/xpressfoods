@@ -43,9 +43,6 @@ const services = [
 ];
 
 const HomeScreen = () => {
-  const { isAdmin } = useAuth();
-  //console.log(isAdmin);
-
   return (
     <ImageBackground
       source={require("@/assets/images/services/services-bg.png")}

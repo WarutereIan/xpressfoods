@@ -1,6 +1,6 @@
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Redirect, Tabs } from "expo-router";
+import Feather from "@expo/vector-icons/Feather";
+import { Link, Redirect, Stack, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 
 import Colors from "@/src/constants/Colors";
@@ -10,10 +10,10 @@ import { useAuth } from "@/src/providers/AuthProvider";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: React.ComponentProps<typeof Feather>["name"];
   color: string;
 }) {
-  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
+  return <Feather size={20} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -23,9 +23,8 @@ export default function TabLayout() {
   if (!session) {
     return <Redirect href={"/(auth)/sign-in"} />;
   }
-
-  return (
-    <Tabs
+  {
+    /* <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         // Disable the static render of the header on web
@@ -35,24 +34,6 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="index" options={{ href: null, headerShown: false }} />
 
-      {/*  <Tabs.Screen
-        name="menu"
-        options={{
-          title: "Menu ",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="cutlery" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: "Orders",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
-        }}
-      /> */}
       <Tabs.Screen
         name="carwash"
         options={{
@@ -61,6 +42,33 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
         }}
       />
-    </Tabs>
+    </Tabs> */
+  }
+
+  return (
+    <Stack
+      screenOptions={{
+        headerRight: () => (
+          <Link href="/profile" asChild>
+            <Pressable>
+              {({ pressed }) => (
+                <Feather
+                  name="settings"
+                  size={25}
+                  color={Colors.light.tint}
+                  style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                />
+              )}
+            </Pressable>
+          </Link>
+        ),
+      }}
+    >
+      <Stack.Screen name="index" options={{ headerShown: true, title: "" }} />
+      <Stack.Screen
+        name="carwash"
+        options={{ headerShown: false, title: "" }}
+      />
+    </Stack>
   );
 }

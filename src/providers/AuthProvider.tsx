@@ -14,9 +14,13 @@ type AuthData = {
   loading: boolean;
   isAdmin: boolean;
   userName: string;
+  phoneNumber: string;
   usernameSetter: (username: string) => void;
-  profileSetter: (profile: string) => void;
+  profileSetter: (profile: any) => void;
+  phoneNumberSetter: (phoneNumber: string) => void;
   refreshSession: () => void;
+  clearSession: () => void;
+  clearProfile: () => void;
 };
 
 const AuthContext = createContext<AuthData>({
@@ -24,10 +28,14 @@ const AuthContext = createContext<AuthData>({
   loading: true,
   profile: null,
   isAdmin: false,
+  phoneNumber: "",
   userName: "",
   usernameSetter: (username: string) => {},
-  profileSetter: (profile: string) => {},
+  profileSetter: (profile: any) => {},
+  phoneNumberSetter: (phoneNumber: string) => {},
   refreshSession: () => {},
+  clearSession: () => {},
+  clearProfile: () => {},
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
@@ -36,6 +44,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const fetchSession = async () => {
     const {
@@ -54,6 +63,8 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       setProfile(data || null);
 
       data.group == "ADMIN" ? setIsAdmin(true) : setIsAdmin(false);
+
+      console.log(profile);
     }
 
     setLoading(false);
@@ -73,11 +84,22 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     setProfile(profile);
   };
 
+  const phoneNumberSetter = (phoneNumber: string) => {
+    setPhoneNumber(phoneNumber);
+  };
+
   const refreshSession = async () => {
     await fetchSession();
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+  };
+
+  const clearSession = () => {
+    setSession(null);
+  };
+  const clearProfile = () => {
+    setProfile(null);
   };
 
   return (
@@ -91,6 +113,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         usernameSetter,
         refreshSession,
         profileSetter,
+        phoneNumber,
+        phoneNumberSetter,
+        clearSession,
+        clearProfile,
       }}
     >
       {children}

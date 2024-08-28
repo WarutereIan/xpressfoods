@@ -16,6 +16,10 @@ const AuthLayout = () => {
     return <Redirect href={"/"} />;
   }
 
+  if (session != null) {
+    return <Redirect href={"/"} />;
+  }
+
   return (
     <Stack>
       <Stack.Screen name="sign-in" options={{ headerShown: false }} />

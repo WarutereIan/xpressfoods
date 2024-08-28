@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -18,6 +18,7 @@ import CarwashProvider from "../providers/CarwashProvider";
 import AuthProvider from "../providers/AuthProvider";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import NotificationProvider from "../providers/NotificationProvider";
+import { Pressable } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -73,7 +74,28 @@ function RootLayoutNav() {
               <CarwashProvider>
                 <CartProvider>
                   <AutocompleteDropdownContextProvider>
-                    <Stack screenOptions={{ headerShown: false }}>
+                    <Stack
+                      screenOptions={{
+                        /* headerRight: () => (
+                          <Link href="/profile" asChild>
+                            <Pressable>
+                              {({ pressed }) => (
+                                <FontAwesome
+                                  name="shopping-cart"
+                                  size={25}
+                                  color={"green"}
+                                  style={{
+                                    marginRight: 15,
+                                    opacity: pressed ? 0.5 : 1,
+                                  }}
+                                />
+                              )}
+                            </Pressable>
+                          </Link>
+                        ), */
+                        headerShown: false,
+                      }}
+                    >
                       <Stack.Screen
                         name="(user)"
                         options={{ headerShown: false }}
@@ -91,16 +113,12 @@ function RootLayoutNav() {
                         options={{ headerShown: false }}
                       />
                       <Stack.Screen
-                        name="select-location"
-                        options={{ headerShown: false }}
+                        name="profile"
+                        options={{ presentation: "modal", headerShown: false }}
                       />
                       <Stack.Screen
                         name="(utility-screens)"
                         options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="cart"
-                        options={{ presentation: "modal" }}
                       />
                     </Stack>
                   </AutocompleteDropdownContextProvider>

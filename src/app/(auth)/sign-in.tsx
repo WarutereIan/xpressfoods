@@ -20,6 +20,16 @@ const LoginScreen = () => {
 
   const { refreshSession, profileSetter } = useAuth();
 
+  async function getProfile(user_id: any) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user_id)
+      .single();
+
+    return profile;
+  }
+
   async function signInWithEmail() {
     if (email.length == 0 || password.length == 0) {
       return Alert.alert("Please provide credentials");
@@ -46,13 +56,9 @@ const LoginScreen = () => {
       return Alert.alert(error.message);
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", data.session.user.id)
-      .single();
-
+    const profile = await getProfile(data.user.id);
     profileSetter(profile);
+
     setLoading(false);
     router.navigate("/");
   }

@@ -1,6 +1,8 @@
+import { useCreateAccount, useInsertUserProfile } from "@/src/api/user";
+import { registerForPushNotificationsAsync } from "@/src/lib/notifications";
 import { supabase } from "@/src/lib/supabase";
 import { useAuth } from "@/src/providers/AuthProvider";
-import { Link, router, useSegments } from "expo-router";
+import { router, useSegments } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -17,10 +19,14 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
   const [confirmPassword, confirmSetPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { usernameSetter, phoneNumberSetter } = useAuth();
+  
+
+  const { mutate: createAccount } = useCreateAccount();
+  const { mutate: insertProfile } = useInsertUserProfile();
+  const { profileSetter } = useAuth();
 
   async function signUpWithEmail() {
     if (!username || !email || !password || !confirmPassword || !phoneNumber) {
@@ -35,16 +41,46 @@ const SignUpScreen = () => {
     usernameSetter(username);
     phoneNumberSetter(phoneNumber);
 
-    const { error } = await supabase.auth.signUp({ email, password });
+    createAccount(
+      { email, password },
+      {
+        onSuccess(data) {
+          const user_id = data.user?.id;
 
-    if (error) {
-      setLoading(false);
-      return Alert.alert(error.message);
-    }
+          //create user profile
+          insertProfile(
+            {
+              name: username,
+              user_id: user_id,
+              phone_number: phoneNumber,
+            },
+            {
+              onSuccess(profile) {
+                //get and set user profile notification token
+                registerForPushNotificationsAsync().then(async (token) => {
+                  //save token in user's profile in db
+                  //update token in db
+                  await supabase
+                    .from("profiles")
+                    .update({ expo_push_token: token })
+                    .eq("user_id", profile.user_id);
 
-    router.navigate("/(auth)/select-location");
-    //for admin signup
-    //router.navigate("/(auth)/admin-location");
+                  profileSetter(profile);
+
+                  router.navigate("/(auth)/select-location");
+                });
+              },
+              onError(error) {
+                return Alert.alert("Error", error.message);
+              },
+            }
+          );
+        },
+        onError(error) {
+          return Alert.alert("Error creating account", error.message);
+        },
+      }
+    );
   }
 
   return (
@@ -107,18 +143,12 @@ const SignUpScreen = () => {
         onChangeText={confirmSetPassword}
         secureTextEntry={true}
       />
-      <Link
-        href={
-          "https://silver-bronze-d04.notion.site/jirani-app-ca152a845fb24694ac2891072283b80b?pvs=4"
-        }
-        asChild={true}
-      >
-        <Text style={styles.terms}>
-          By continuing you agree to our{" "}
-          <Text style={styles.link}>Terms of Service</Text> and{" "}
-          <Text style={styles.link}>Privacy Policy</Text>.
-        </Text>
-      </Link>
+
+      <Text style={styles.terms}>
+        By continuing you agree to our{" "}
+        <Text style={styles.link}>Terms of Service</Text> and{" "}
+        <Text style={styles.link}>Privacy Policy</Text>.
+      </Text>
 
       <TouchableOpacity style={styles.button} onPress={signUpWithEmail}>
         <Text style={styles.buttonText}>
