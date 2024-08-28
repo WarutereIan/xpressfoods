@@ -12,7 +12,6 @@ import {
   ScrollView,
 } from "react-native";
 
-import CarwashSvg from "@/assets/images/services/carwash.svg";
 import { useAuth } from "@/src/providers/AuthProvider";
 
 const services = [
@@ -23,7 +22,6 @@ const services = [
     onPress: () => {
       router.navigate("/(user)/carwash");
     },
-    CarwashSvg,
   },
   {
     name: "Jirani",

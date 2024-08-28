@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965151194293",
+    "project_id": "jirani-aa3fe",
+    "storage_bucket": "jirani-aa3fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965151194293:android:c56872bb245db58e6092fc",
+        "android_client_info": {
+          "package_name": "com.wateki.jirani"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4l_2Fz2M-O1_7udm0xN9qvgnkXX5_b2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
