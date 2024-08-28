@@ -31,9 +31,7 @@ export default function MenuStack() {
       />
       <Stack.Screen name="dashboard" options={{ headerShown: false }} />
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="orderDetails" options={{ headerShown: false }} />
       <Stack.Screen name="paymentHistory" options={{ headerShown: false }} />
-
       <Stack.Screen name="[id]" options={{ headerShown: false }} />
     </Stack>
   );
