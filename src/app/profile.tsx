@@ -25,10 +25,28 @@ const EditProfileScreen = () => {
   const { mutate: deleteProfile } = useDeleteProfile();
   const { mutate: insertProfile } = useInsertUserProfile();
   //get profile when user opens page
-  const { session, clearSession, clearProfile, profile } = useAuth();
+  let { session, clearSession, clearProfile, profile } = useAuth();
 
-  // let profile: any;
   console.log(profile);
+
+  async function fetchProfile(user_id) {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", user_id)
+      .single();
+
+    return data;
+  }
+
+  if (profile == null) {
+    //fetch profile
+    fetchProfile(session?.user.id).then((data) => {
+      console.log(data);
+
+      profile = data;
+    });
+  }
 
   useEffect(() => {
     setName(profile?.name);

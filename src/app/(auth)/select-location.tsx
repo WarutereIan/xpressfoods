@@ -19,7 +19,7 @@ const LocationSelectionScreen = () => {
   const [zone, setZone] = useState("Tilisi");
   const [area, setArea] = useState("");
 
-  const { userName, session, phoneNumber } = useAuth();
+  const { userName, session, phoneNumber, refreshProfile } = useAuth();
   const { mutate: insertProfile } = useInsertUserProfile();
 
   const onPress = () => {
@@ -46,6 +46,8 @@ const LocationSelectionScreen = () => {
               .update({ expo_push_token: token })
               .eq("user_id", session?.user.id);
           });
+
+          refreshProfile();
 
           router.navigate("/(utility-screens)/home");
         },

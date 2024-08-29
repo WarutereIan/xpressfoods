@@ -19,6 +19,7 @@ type AuthData = {
   profileSetter: (profile: any) => void;
   phoneNumberSetter: (phoneNumber: string) => void;
   refreshSession: () => void;
+  refreshProfile: () => void;
   clearSession: () => void;
   clearProfile: () => void;
 };
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthData>({
   profileSetter: (profile: any) => {},
   phoneNumberSetter: (phoneNumber: string) => {},
   refreshSession: () => {},
+  refreshProfile: () => {},
   clearSession: () => {},
   clearProfile: () => {},
 });
@@ -63,8 +65,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       setProfile(data || null);
 
       data.group == "ADMIN" ? setIsAdmin(true) : setIsAdmin(false);
-
-      console.log(profile);
     }
 
     setLoading(false);
@@ -75,6 +75,17 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       setSession(session);
     });
   }, []);
+
+  const refreshProfile = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", session?.user.id)
+      .single();
+    setProfile(data || null);
+
+    data.group == "ADMIN" ? setIsAdmin(true) : setIsAdmin(false);
+  };
 
   const usernameSetter = (username: string) => {
     setUserName(username);
@@ -117,6 +128,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         phoneNumberSetter,
         clearSession,
         clearProfile,
+        refreshProfile,
       }}
     >
       {children}

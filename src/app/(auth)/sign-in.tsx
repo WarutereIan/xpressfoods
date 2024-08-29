@@ -18,7 +18,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { refreshSession, profileSetter } = useAuth();
+  const { refreshSession, profileSetter, refreshProfile } = useAuth();
 
   async function getProfile(user_id: any) {
     const { data: profile } = await supabase
@@ -58,6 +58,7 @@ const LoginScreen = () => {
 
     const profile = await getProfile(data.user.id);
     profileSetter(profile);
+    refreshProfile();
 
     setLoading(false);
     router.navigate("/");
