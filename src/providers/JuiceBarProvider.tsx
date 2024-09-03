@@ -1,18 +1,28 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-import { CartItem, Product } from "../types";
+import { CartItem } from "../types";
 import { randomUUID } from "expo-crypto";
-import { useInsertOrder } from "../api/orders";
+
 import { useRouter } from "expo-router";
-import { useInsertOrderItems } from "../api/order-items";
+import { useInsertOrder } from "../api/juicebar/orders";
+import { useInsertOrderItems } from "../api/juicebar/order-items";
+
 type CartType = {
   items: CartItem[];
-  addItem: (product: Product, size: CartItem["size"]) => void;
+  addItem: (product: Product, size: CartItem["size"], quantity: number) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
   total: number;
   checkout: () => void;
 };
 
-const CartContext = createContext<CartType>({
+type Product = {
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  category: string;
+};
+
+const JuiceBarContext = createContext<CartType>({
   items: [],
   addItem: () => {},
   updateQuantity: () => {},
@@ -20,15 +30,20 @@ const CartContext = createContext<CartType>({
   checkout: () => {},
 });
 
-const CartProvider = ({ children }: PropsWithChildren) => {
+const JuiceBarProvider = ({ children }: PropsWithChildren) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
   const { mutate: insertOrder } = useInsertOrder();
   const { mutate: insertOrderItems } = useInsertOrderItems();
   const router = useRouter();
 
-  const addItem = (product: Product, size: CartItem["size"]) => {
+  const addItem = (
+    product: Product,
+    size: CartItem["size"],
+    quantity: number
+  ) => {
     //if already in cart, increment quantity
+
     const existingItem = items.find(
       (item) => item.product === product && item.size === size
     );
@@ -42,9 +57,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       product,
       product_id: product.id,
       size,
-      quantity: 1,
+      quantity: quantity,
       id: randomUUID(),
-      category: "",
+        category: product.category,
+      image: ""
     };
 
     setItems([newCartItem, ...items]);
@@ -80,6 +96,9 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       { total },
       {
         onSuccess: saveOrderItems,
+        onError: (error) => {
+          console.log(error);
+        },
       }
     );
   };
@@ -96,21 +115,24 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         onSuccess() {
           clearCart();
 
-          router.push(`/(user)/orders/${newOrder.id}`);
+          router.push(`/(user)/juicebar/orders`);
+        },
+        onError: (error) => {
+          console.log(error);
         },
       }
     );
   };
 
   return (
-    <CartContext.Provider
+    <JuiceBarContext.Provider
       value={{ items, addItem, updateQuantity, total, checkout }}
     >
       {children}
-    </CartContext.Provider>
+    </JuiceBarContext.Provider>
   );
 };
 
-export default CartProvider;
+export default JuiceBarProvider;
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => useContext(JuiceBarContext);

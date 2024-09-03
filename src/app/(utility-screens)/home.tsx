@@ -26,15 +26,19 @@ const services = [
     CarwashSvg,
   },
   {
+    name: "JUICE BAR",
+    image: require("@/assets/images/services/juice-bar.png"),
+    isLive: true,
+    onPress: () => {
+      router.navigate("/(user)/juicebar");
+    },
+  },
+  {
     name: "Jirani",
     image: require("@/assets/images/services/jirani.png"),
     isLive: false,
   },
-  {
-    name: "JUICE BAR",
-    image: require("@/assets/images/services/juice-bar.png"),
-    isLive: false,
-  },
+
   {
     name: "OSHA",
     image: require("@/assets/images/services/osha.png"),

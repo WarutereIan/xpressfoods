@@ -20,35 +20,14 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { session } = useAuth();
 
-  if (!session) {
+  /* if (!session) {
     return <Redirect href={"/(auth)/sign-in"} />;
-  }
-  {
-    /* <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
-    >
-      <Tabs.Screen name="index" options={{ href: null, headerShown: false }} />
-
-      <Tabs.Screen
-        name="carwash"
-        options={{
-          title: "Carwash",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="car" color={color} />,
-        }}
-      />
-    </Tabs> */
-  }
+  } */
 
   return (
     <Stack
       screenOptions={{
-        headerRight: () => (
+        /* headerRight: () => (
           <Link href="/profile" asChild>
             <Pressable>
               {({ pressed }) => (
@@ -61,18 +40,13 @@ export default function TabLayout() {
               )}
             </Pressable>
           </Link>
-        ),
+        ), */
+        headerShown: false,
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: true, title: "" }} />
-      <Stack.Screen
-        name="carwash"
-        options={{ headerShown: false, title: "" }}
-      />
-      <Stack.Screen
-        name="juicebar"
-        options={{ headerShown: false, title: "" }}
-      />
+      <Stack.Screen name="cart" options={{ headerShown: true, title: "" }} />
+      <Stack.Screen name="orders" options={{ headerShown: true, title: "" }} />
     </Stack>
   );
 }

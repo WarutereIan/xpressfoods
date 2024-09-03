@@ -19,6 +19,7 @@ import AuthProvider from "../providers/AuthProvider";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import NotificationProvider from "../providers/NotificationProvider";
 import { Pressable } from "react-native";
+import JuiceBarProvider from "../providers/JuiceBarProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -73,10 +74,11 @@ function RootLayoutNav() {
             <NotificationProvider>
               <CarwashProvider>
                 <CartProvider>
-                  <AutocompleteDropdownContextProvider>
-                    <Stack
-                      screenOptions={{
-                        /* headerRight: () => (
+                  <JuiceBarProvider>
+                    <AutocompleteDropdownContextProvider>
+                      <Stack
+                        screenOptions={{
+                          /* headerRight: () => (
                           <Link href="/profile" asChild>
                             <Pressable>
                               {({ pressed }) => (
@@ -93,35 +95,39 @@ function RootLayoutNav() {
                             </Pressable>
                           </Link>
                         ), */
-                        headerShown: false,
-                      }}
-                    >
-                      <Stack.Screen
-                        name="(user)"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="(auth)"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="(admin)"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="welcome"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="profile"
-                        options={{ presentation: "modal", headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="(utility-screens)"
-                        options={{ headerShown: false }}
-                      />
-                    </Stack>
-                  </AutocompleteDropdownContextProvider>
+                          headerShown: false,
+                        }}
+                      >
+                        <Stack.Screen
+                          name="(user)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="(auth)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="(admin)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="welcome"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="profile"
+                          options={{
+                            presentation: "modal",
+                            headerShown: false,
+                          }}
+                        />
+                        <Stack.Screen
+                          name="(utility-screens)"
+                          options={{ headerShown: false }}
+                        />
+                      </Stack>
+                    </AutocompleteDropdownContextProvider>
+                  </JuiceBarProvider>
                 </CartProvider>
               </CarwashProvider>
             </NotificationProvider>
