@@ -30,7 +30,7 @@ const services = [
     image: require("@/assets/images/services/juice-bar.png"),
     isLive: true,
     onPress: () => {
-      router.navigate("/(user)/juicebar");
+      router.navigate("/(admin)/juicebar/menu");
     },
   },
   {

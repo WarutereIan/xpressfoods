@@ -11,6 +11,7 @@ export const useProductList = () => {
       if (error) {
         throw new Error(error.message);
       }
+
       return data;
     },
   });
@@ -45,6 +46,7 @@ export const useInsertProduct = () => {
           name: data.name,
           image: data.image,
           price: data.price,
+          category: data.category,
         })
         .single();
 
@@ -71,6 +73,7 @@ export const useUpdateProduct = () => {
           name: data.name,
           image: data.image,
           price: data.price,
+          category: data.category,
         })
         .eq("id", data.id)
         .select()

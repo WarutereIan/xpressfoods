@@ -29,6 +29,7 @@ const smoothies = [
     image: "@/assets/images/STRAWBERRY.jpg",
     //need category
     category: "smoothies",
+    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
   },
   {
     id: "2",
@@ -36,6 +37,7 @@ const smoothies = [
     price: 15,
     image: "@/assets/images/STRAWBERRY.jpg",
     category: "smoothies",
+    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
   },
   {
     id: "3",
@@ -43,6 +45,7 @@ const smoothies = [
     price: 12,
     image: "@/assets/images/STRAWBERRY.jpg",
     category: "smoothies",
+    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
   },
 ];
 
@@ -58,7 +61,7 @@ const StrawberrySmoothieCard = ({ item, onPress }) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 0.2, y: 0.7 }}
       />
-      <Image src={item.image} style={styles3.image} />
+      <Image source={item.imageLoad} style={styles3.image} />
       <View style={styles3.content}>
         {item.name.split(" ").map((word, index) => (
           <Text key={index} style={styles3.title}>
@@ -132,7 +135,7 @@ const SmoothieDetail = ({ item, visible, onClose }) => {
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Ionicons name="close" size={24} color="#000" />
           </TouchableOpacity>
-          <Image source={item.image} style={styles.detailImage} />
+          <Image source={item.imageLoad} style={styles.detailImage} />
           <Text style={styles.detailTitle}>{item.name}</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="#FFD700" />
