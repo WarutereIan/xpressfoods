@@ -19,10 +19,9 @@ const index = () => {
     return <Redirect href={"/welcome"} />;
   }
 
-  /* if (!isAdmin) {
-    return <Redirect href={"/(user)/carwash"} />;
-  } */
-  console.log(profile);
+  if (!isAdmin) {
+    return <Redirect href={"/(utility-screens)/home"} />;
+  }
 
   if (isAdmin) {
     return (
@@ -30,7 +29,7 @@ const index = () => {
         <Link href={`/(user)/${profile.admin_app}`} asChild>
           <Button text="User" />
         </Link>
-        <Link href={`/(admin)/${profile.admin_app}Admin`} asChild>
+        <Link href={`/(admin)/${profile.admin_app}`} asChild>
           <Button text="Admin" />
         </Link>
       </View>

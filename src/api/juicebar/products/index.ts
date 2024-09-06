@@ -14,6 +14,7 @@ export const useProductList = () => {
 
       return data;
     },
+    
   });
 };
 
@@ -47,6 +48,7 @@ export const useInsertProduct = () => {
           image: data.image,
           price: data.price,
           category: data.category,
+          description: data.description,
         })
         .single();
 
@@ -74,6 +76,7 @@ export const useUpdateProduct = () => {
           image: data.image,
           price: data.price,
           category: data.category,
+          description: data.description,
         })
         .eq("id", data.id)
         .select()

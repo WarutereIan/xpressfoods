@@ -19,14 +19,41 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
-  /*  const { profile } = useAuth();
+  const { profile } = useAuth();
   if (!profile || profile.group !== "ADMIN") {
     return <Redirect href="/" />;
-  } */
-
-  return (
-    <Stack>
+  }
+  {
+    /* <Stack>
       <Stack.Screen name="carwashAdmin" options={{ headerShown: false }} />
-    </Stack>
+      <Stack.Screen
+        name="juicebar/menu"
+        options={{ headerShown: true, title: "" }}
+      />
+    </Stack> */
+  }
+  return (
+    <Tabs>
+      <Tabs.Screen name="index" options={{ href: null }} />
+
+      <Tabs.Screen
+        name="menu"
+        options={{
+          title: "Products",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="glass" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: "Orders",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="navicon" color={color} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }

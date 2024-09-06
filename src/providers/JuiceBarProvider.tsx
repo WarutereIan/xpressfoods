@@ -59,8 +59,8 @@ const JuiceBarProvider = ({ children }: PropsWithChildren) => {
       size,
       quantity: quantity,
       id: randomUUID(),
-        category: product.category,
-      image: ""
+      category: product.category,
+      image: product.image,
     };
 
     setItems([newCartItem, ...items]);

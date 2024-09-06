@@ -1,7 +1,15 @@
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  Alert,
+  ScrollView,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
@@ -15,6 +23,8 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/src/api/juicebar/products";
+import RemoteImage from "@/src/components/RemoteImage";
+import { Picker } from "@react-native-picker/picker";
 
 const CreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -22,6 +32,8 @@ const CreateProductScreen = () => {
   const [price, setPrice] = useState("");
   const [errors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === "string" ? idString : "");
@@ -40,6 +52,7 @@ const CreateProductScreen = () => {
       setPrice(updatingProduct.price.toString());
       setImage(updatingProduct.image);
       setCategory(updatingProduct.category);
+      setDescription(updatingProduct.description);
     }
   }, [updatingProduct]);
 
@@ -47,6 +60,7 @@ const CreateProductScreen = () => {
     setName("");
     setPrice("");
     setCategory("");
+    setDescription("");
   };
 
   const validateInput = () => {
@@ -74,9 +88,13 @@ const CreateProductScreen = () => {
   const onSubmit = () => {
     if (isUpdating) {
       //update
+      setSubmitting(true);
       onUpdateCreate();
+      setSubmitting(false);
     } else {
+      setSubmitting(true);
       onCreate();
+      setSubmitting(false);
     }
   };
 
@@ -108,10 +126,12 @@ const CreateProductScreen = () => {
     const imagePath = await uploadImage();
 
     updateProduct(
-      { name, price: parseFloat(price), image: imagePath },
+      { name, price: parseFloat(price), image: imagePath, id, description },
 
       {
         onSuccess: () => {
+          console.log("updated Product", name);
+
           resetFields();
           router.back();
         },
@@ -129,9 +149,17 @@ const CreateProductScreen = () => {
 
     //save in db
     insertProduct(
-      { name, price: parseFloat(price), image: imagePath, category: category },
+      {
+        name,
+        price: parseFloat(price),
+        image: imagePath,
+        category: category,
+        description,
+      },
       {
         onSuccess: () => {
+          console.log("created product", name);
+
           resetFields();
           router.back();
         },
@@ -183,12 +211,10 @@ const CreateProductScreen = () => {
       <Stack.Screen
         options={{ title: isUpdating ? "Update Product" : "Create Product" }}
       />
-      <Image
-        source={{
-          uri:
-            image ||
-            "https://img.freepik.com/premium-photo/strawberry-banana-smoothie-art-style_759095-46051.jpg?w=740",
-        }}
+
+      <RemoteImage
+        path={updatingProduct ? updatingProduct.image : ""}
+        fallback="https://img.freepik.com/premium-photo/strawberry-banana-smoothie-art-style_759095-46051.jpg?w=740"
         style={styles.image}
       />
 
@@ -212,7 +238,31 @@ const CreateProductScreen = () => {
         style={styles.input}
       />
 
-      <Text style={styles.label}>Category ($)</Text>
+      <Text style={styles.label}>Description</Text>
+
+      <TextInput
+        placeholder="Description"
+        value={description}
+        onChangeText={setDescription}
+        //keyboardType="numeric"
+        style={styles.input}
+      />
+
+      <View style={styles.pickerContainer}>
+        <Text style={styles.label}>Category</Text>
+        <Picker
+          selectedValue={category}
+          onValueChange={(itemValue) => setCategory(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Smoothies" value="smoothies" />
+          <Picker.Item label="Coffee" value="coffee" />
+          <Picker.Item label="Shakes" value="shakes" />
+          <Picker.Item label="Juice" value="juice" />
+        </Picker>
+      </View>
+
+      {/* <Text style={styles.label}>Category ($)</Text>
 
       <TextInput
         placeholder="Category"
@@ -220,7 +270,7 @@ const CreateProductScreen = () => {
         onChangeText={setCategory}
         //keyboardType="numeric"
         style={styles.input}
-      />
+      /> */}
 
       <Text style={{ color: "red" }}>{errors}</Text>
       <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
@@ -249,6 +299,14 @@ const styles = StyleSheet.create({
   label: {
     color: "gray",
     fontSize: 16,
+  },
+  pickerContainer: {
+    marginBottom: 20,
+  },
+
+  picker: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
   },
   image: {
     width: "50%",

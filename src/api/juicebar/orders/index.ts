@@ -4,7 +4,7 @@ import { Order } from "@/src/types";
 import { useAuth } from "@/src/providers/AuthProvider";
 
 export const useAdminOrderList = ({ archived = false }) => {
-  const statuses = archived ? ["Archived"] : ["New", "Blending", "Delivering"];
+  const statuses = archived ? ["Delivered"] : ["New", "Blending", "Delivering"];
 
   return useQuery({
     queryKey: ["juicebar_orders", { archived }],
@@ -48,8 +48,8 @@ export const useOrderDetails = (id: number) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("juicebar_orders")
-        // .select("*, order_items(*, products(*))")
-        .select("*, juicebar_order_items(*)")
+        .select("*, juicebar_order_items(*, juicebar_products(*))")
+        //.select("*, juicebar_order_items(*)")
         .eq("id", id)
         .single();
 
@@ -86,7 +86,7 @@ export const useInsertOrder = () => {
   });
 };
 
-export const useUpdateOrderStatus = () => {
+export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

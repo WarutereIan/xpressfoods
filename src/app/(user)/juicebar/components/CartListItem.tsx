@@ -31,7 +31,8 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
         style={styles.image}
         resizeMode="contain"
       /> */}
-      <Image src={cartItem.image} style={styles.image} resizeMode="contain" />
+      <RemoteImage path={cartItem.image} fallback="" style={styles.image} />
+      {/*  <Image src={cartItem.image} style={styles.image} resizeMode="contain" /> */}
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>{cartItem.product.name}</Text>
         <View style={styles.subtitleContainer}>

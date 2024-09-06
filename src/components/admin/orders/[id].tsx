@@ -11,14 +11,17 @@ import OrderListItem from "@/src/components/OrderListItem";
 import OrderItemListItem from "@/src/components/OrderItemListItem";
 import { OrderStatus, OrderStatusList } from "@/src/types";
 import Colors from "@/src/constants/Colors";
-import { useOrderDetails, useUpdateOrder } from "@/src/api/orders";
+import {
+  useOrderDetails,
+  useUpdateOrderStatus,
+} from "@/src/api/juicebar/orders";
 
 export default function OrderDetailsScreen() {
   const { id: idString } = useLocalSearchParams();
 
   const id = parseFloat(typeof idString === "string" ? idString : "");
 
-  const { mutate: updateOrder } = useUpdateOrder();
+  const { mutate: updateOrder } = useUpdateOrderStatus();
 
   const updateStatus = async (status: OrderStatus) => {
     updateOrder({ id, status: status });

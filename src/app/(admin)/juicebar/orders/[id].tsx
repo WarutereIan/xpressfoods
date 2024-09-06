@@ -6,12 +6,13 @@ import {
   Text,
   View,
 } from "react-native";
-import orders from "@/assets/data/orders";
-import OrderListItem from "@/src/components/OrderListItem";
-import OrderItemListItem from "@/src/components/OrderItemListItem";
+
 import { OrderStatus, OrderStatusList } from "@/src/types";
 import Colors from "@/src/constants/Colors";
-import { useOrderDetails, useUpdateOrder } from "@/src/api/orders";
+
+import OrderListItem from "@/src/components/juicebar/components/OrderListItem";
+import { useOrderDetails, useUpdateOrder } from "@/src/api/juicebar/orders";
+import OrderItemListItem from "@/src/components/juicebar/components/OrderItemListItem";
 
 export default function OrderDetailsScreen() {
   const { id: idString } = useLocalSearchParams();
@@ -38,11 +39,17 @@ export default function OrderDetailsScreen() {
   }
 
   return (
-    <View style={{ padding: 10, gap: 20 }}>
+    <View
+      style={{ padding: 10, gap: 20, backgroundColor: "brown", height: "100%" }}
+    >
       <Stack.Screen options={{ title: `Order #${id}` }} />
       <OrderListItem order={order} />
+      <Text style={{ fontWeight: "600", textAlign: "center", fontSize: 16 }}>
+        {" "}
+        Order Items:
+      </Text>
       <FlatList
-        data={order.order_items}
+        data={order.juicebar_order_items}
         renderItem={({ item }) => <OrderItemListItem item={item} />}
         contentContainerStyle={{ gap: 10 }}
         ListFooterComponent={() => (

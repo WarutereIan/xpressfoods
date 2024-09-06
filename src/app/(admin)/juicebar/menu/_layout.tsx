@@ -5,7 +5,7 @@ import { Pressable } from "react-native";
 
 export default function MenuStack() {
   return (
-    <Stack screenOptions={{ title: "" }}>
+    <Stack screenOptions={{ headerShown: true }}>
       <Stack.Screen
         name="index"
         options={{
@@ -30,7 +30,7 @@ export default function MenuStack() {
         name="[id]"
         options={{
           title: "Product Info",
-          headerRight: () => (
+          /* headerRight: () => (
             <Link href="/(admin)/juicebar/menu/create" asChild>
               <Pressable>
                 {({ pressed }) => (
@@ -43,7 +43,7 @@ export default function MenuStack() {
                 )}
               </Pressable>
             </Link>
-          ),
+          ), */
         }}
       />
     </Stack>

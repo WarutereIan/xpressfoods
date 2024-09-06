@@ -1,6 +1,7 @@
 import { Text, FlatList, ActivityIndicator } from "react-native";
-import OrderListItem from "@/src/components/OrderListItem";
-import { useAdminOrderList } from "@/src/api/orders";
+
+import { useAdminOrderList } from "@/src/api/juicebar/orders";
+import OrderListItem from "../../../../../components/juicebar/components/OrderListItem";
 
 export default function OrdersScreen() {
   const {

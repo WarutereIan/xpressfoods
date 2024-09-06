@@ -38,9 +38,9 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
     })();
   }, [path]);
 
-  if (!image) {
+  /* if (!image) {
     console.warn("no image");
-  }
+  } */
 
   return (
     <Image

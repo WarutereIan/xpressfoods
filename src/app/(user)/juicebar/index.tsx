@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -10,14 +10,17 @@ import {
   SafeAreaView,
   Modal,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCart } from "@/src/providers/JuiceBarProvider";
 import { router } from "expo-router";
 import { PizzaSize } from "@/src/types";
+import { useProductList } from "@/src/api/juicebar/products";
+import RemoteImage from "@/src/components/RemoteImage";
 
-const categories = ["Shakes", "Coffee", "Mocktail", "Cocktail"];
+const categories = ["Shakes", "Coffee", "Juice", "Smoothies"];
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -61,7 +64,8 @@ const StrawberrySmoothieCard = ({ item, onPress }) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 0.2, y: 0.7 }}
       />
-      <Image source={item.imageLoad} style={styles3.image} />
+      <RemoteImage path={item.image} fallback="" style={styles3.image} />
+      {/*  <Image source={item.imageLoad} style={styles3.image} /> */}
       <View style={styles3.content}>
         {item.name.split(" ").map((word, index) => (
           <Text key={index} style={styles3.title}>
@@ -135,7 +139,12 @@ const SmoothieDetail = ({ item, visible, onClose }) => {
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Ionicons name="close" size={24} color="#000" />
           </TouchableOpacity>
-          <Image source={item.imageLoad} style={styles.detailImage} />
+          <RemoteImage
+            path={item.image}
+            fallback=""
+            style={styles.detailImage}
+          />
+          {/*   <Image source={item.imageLoad} style={styles.detailImage} /> */}
           <Text style={styles.detailTitle}>{item.name}</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="#FFD700" />
@@ -194,9 +203,7 @@ const SmoothieDetail = ({ item, visible, onClose }) => {
             </View>
           </View>
 
-          <Text style={styles.detailDescription}>
-            Cold, creamy, thick mango smoothie filled with juicy mango
-          </Text>
+          <Text style={styles.detailDescription}>{item.description}</Text>
 
           <Text style={{ marginBottom: 10, fontSize: 15, fontStyle: "italic" }}>
             Selected Size: {selectedSize}
@@ -221,6 +228,7 @@ const SmoothieDetail = ({ item, visible, onClose }) => {
                   style={[
                     styles.sizeText,
                     { color: selectedSize === size ? "white" : "grey" },
+                    {},
                   ]}
                 >
                   {size}
@@ -240,11 +248,15 @@ const SmoothieDetail = ({ item, visible, onClose }) => {
 
 const VerticalCategoryButton = ({ category, isSelected, onPress }) => (
   <TouchableOpacity
-    style={[styles.categoryButton, isSelected && styles.selectedCategory]}
+    style={[
+      styles.categoryButton,
+      isSelected && styles.selectedCategory,
+      { transform: [{ rotate: "0deg" }] },
+    ]}
     onPress={onPress}
   >
     <Text
-      style={[styles.categoryButtonText, { transform: [{ rotate: "270deg" }] }]}
+      style={[styles.categoryButtonText, { transform: [{ rotate: "0deg" }] }]}
     >
       {category}
     </Text>
@@ -252,8 +264,36 @@ const VerticalCategoryButton = ({ category, isSelected, onPress }) => (
 );
 
 const App = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Shakes");
+  const { data: products, error, isLoading } = useProductList();
+
+  const [selectedCategory, setSelectedCategory] = useState("Smoothies");
   const [selectedSmoothie, setSelectedSmoothie] = useState(null);
+  const [selectedProducts, setSelectedProducts] = useState<any[] | undefined>(
+    products?.filter((product) => product.category == "smoothies")
+  );
+
+  useEffect(() => {
+    setProductCategories();
+  }, [selectedCategory]);
+
+  //fn to set selected products
+  const setProductCategories = () => {
+    let selected = products?.filter(
+      (product) => product.category == selectedCategory.toLowerCase()
+    );
+    setSelectedProducts(selected);
+  };
+
+  /* let selectedProducts = products?.filter(
+    (product) => product.category == selectedCategory
+  ); */
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error) {
+    return <Text>failed to fetch products</Text>;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -297,14 +337,18 @@ const App = () => {
               key={category}
               category={category}
               isSelected={selectedCategory === category}
-              onPress={() => setSelectedCategory(category)}
+              onPress={() => {
+                setSelectedCategory(category);
+
+                console.log(selectedProducts);
+              }}
             />
           ))}
         </View>
         <View style={styles.separator} />
         <View style={styles.rightColumn}>
           <FlatList
-            data={smoothies}
+            data={selectedProducts}
             renderItem={({ item }) => (
               <StrawberrySmoothieCard
                 item={item}
@@ -371,10 +415,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   leftColumn: {
-    width: 60,
+    width: 80,
     backgroundColor: "#6B3E26",
     paddingVertical: 20,
-    alignItems: "center",
+
+    //alignItems: "flex-end",
+    justifyContent: "space-evenly",
   },
   rightColumn: {
     flex: 1,
@@ -389,21 +435,25 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   categoryButton: {
-    width: 40,
-    height: 120,
+    width: "100%",
+    height: 110,
     justifyContent: "center",
     alignItems: "center",
+
     //marginBottom: 20,
   },
   selectedCategory: {
     backgroundColor: "#8B4513",
-    borderRadius: 0,
+    borderRadius: 5,
   },
   categoryButtonText: {
     color: "#FFF",
-    fontSize: 16,
-    justifyContent: "flex-start",
+    fontSize: 12,
+    justifyContent: "flex-end",
+    textAlign: "justify",
     fontWeight: "800",
+    overflow: "hidden",
+    //textDecorationLine: "line-through",
   },
   categoryTitle: {
     fontSize: 20,

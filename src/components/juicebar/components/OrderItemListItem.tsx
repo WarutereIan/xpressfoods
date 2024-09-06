@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
+
+import { defaultPizzaImage } from "./ProductListItem";
 import { OrderItem } from "@/src/types";
 import RemoteImage from "@/src/components/RemoteImage";
 import Colors from "@/src/constants/Colors";
@@ -9,8 +11,6 @@ type OrderItemListItemProps = {
 };
 
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
- 
-
   return (
     <View style={styles.container}>
       <RemoteImage
