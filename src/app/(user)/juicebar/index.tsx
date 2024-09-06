@@ -19,38 +19,11 @@ import { router } from "expo-router";
 import { PizzaSize } from "@/src/types";
 import { useProductList } from "@/src/api/juicebar/products";
 import RemoteImage from "@/src/components/RemoteImage";
+import { supabase } from "@/src/lib/supabase";
 
-const categories = ["Shakes", "Coffee", "Juice", "Smoothies"];
+const categories = ["All", "Shakes", "Coffee", "Juice", "Smoothies"];
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
-
-const smoothies = [
-  {
-    id: "1",
-    name: "Strawberry Smoothie",
-    price: 10,
-    image: "@/assets/images/STRAWBERRY.jpg",
-    //need category
-    category: "smoothies",
-    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
-  },
-  {
-    id: "2",
-    name: "Mango Smoothie",
-    price: 15,
-    image: "@/assets/images/STRAWBERRY.jpg",
-    category: "smoothies",
-    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
-  },
-  {
-    id: "3",
-    name: "Green Smoothie",
-    price: 12,
-    image: "@/assets/images/STRAWBERRY.jpg",
-    category: "smoothies",
-    imageLoad: require("@/assets/images/STRAWBERRY.jpg"),
-  },
-];
 
 const StrawberrySmoothieCard = ({ item, onPress }) => {
   let { name, price, image } = item;
@@ -264,13 +237,30 @@ const VerticalCategoryButton = ({ category, isSelected, onPress }) => (
 );
 
 const App = () => {
-  const { data: products, error, isLoading } = useProductList();
+  const { data, error, isLoading } = useProductList();
 
-  const [selectedCategory, setSelectedCategory] = useState("Smoothies");
+  let products: any[] | undefined | null = data;
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("juicebar_products")
+      .select("*");
+
+    return { data, error };
+  };
+
+  //might have to fetch products in here??
+  useEffect(() => {
+    fetchProducts().then((result) => {
+      products = result.data;
+    });
+  }, []);
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSmoothie, setSelectedSmoothie] = useState(null);
-  const [selectedProducts, setSelectedProducts] = useState<any[] | undefined>(
-    products?.filter((product) => product.category == "smoothies")
-  );
+  const [selectedProducts, setSelectedProducts] = useState<
+    any[] | undefined | null
+  >(products);
 
   useEffect(() => {
     setProductCategories();
@@ -278,15 +268,14 @@ const App = () => {
 
   //fn to set selected products
   const setProductCategories = () => {
-    let selected = products?.filter(
-      (product) => product.category == selectedCategory.toLowerCase()
-    );
+    let selected =
+      selectedCategory == "All"
+        ? products
+        : products?.filter(
+            (product) => product.category == selectedCategory.toLowerCase()
+          );
     setSelectedProducts(selected);
   };
-
-  /* let selectedProducts = products?.filter(
-    (product) => product.category == selectedCategory
-  ); */
 
   if (isLoading) {
     return <ActivityIndicator />;
