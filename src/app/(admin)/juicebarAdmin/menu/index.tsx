@@ -153,7 +153,7 @@ const App = () => {
                 onPress={() => {
                   //instead route to given/selected product
                   console.log(item);
-                  router.navigate(`/(admin)/juicebar/menu/${item.id}`);
+                  router.navigate(`/(admin)/juicebarAdmin/menu/${item.id}`);
                 }}
               />
             )}

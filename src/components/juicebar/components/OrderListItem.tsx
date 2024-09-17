@@ -15,7 +15,7 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   console.log(order);
 
   return (
-    <Link href={`/(admin)/juicebar/orders/${order.id}`} asChild>
+    <Link href={`/(admin)/juicebarAdmin/orders/${order.id}`} asChild>
       <Pressable style={styles.container}>
         <View>
           <Text style={styles.title}>Order #{order.id}</Text>

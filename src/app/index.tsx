@@ -29,7 +29,7 @@ const index = () => {
         <Link href={`/(user)`} asChild>
           <Button text="User" />
         </Link>
-        <Link href={`/(admin)/${profile.admin_app}`} asChild>
+        <Link href={`/(admin)/${profile.admin_app}Admin`} asChild>
           <Button text="Admin" />
         </Link>
       </View>

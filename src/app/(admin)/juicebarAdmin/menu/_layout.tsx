@@ -11,7 +11,7 @@ export default function MenuStack() {
         options={{
           title: "Menu",
           headerRight: () => (
-            <Link href="/(admin)/juicebar/menu/create" asChild>
+            <Link href="/(admin)/juicebarAdmin/menu/create" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
